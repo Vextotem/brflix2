@@ -98,7 +98,7 @@ export default function Nav() {
           <i className="fa-regular fa-list"></i>
         </NavLink>
 
-        <a href="https://t.me/+kxUS1__4bCA0ODFl" className='mobile' target="_blank" rel="noopener noreferrer"><i className="fa-regular fa-comments"></i>
+        <a href="https://t.me/HdoBoxApk" className='mobile' target="_blank" rel="noopener noreferrer"><i className="fa-regular fa-comments"></i>
         </a>
       </div>
 
