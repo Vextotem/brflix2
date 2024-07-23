@@ -34,18 +34,20 @@ export default function Watch() {
   }
 
   function getSource() {
-    let url =
-      type === 'movie'
-        ? `${import.meta.env.VITE_SUPER_API}${id}&tmdb=1`
-        : `${import.meta.env.VITE_SUPER_API}${id}&tmdb=1&s=${season}&e=${episode}`;
+    let url;
+    if (type === 'movie') {
+        url = `https://vidsrc.xyz/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+    } else if (type === 'series') {
+        url = `https://vidsrc.xyz/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+    }
     return url;
-  }
+}
 
-  function getTitle() {
+function getTitle() {
     let title = data ? data.title : 'Watch';
     if (type === 'series') title += ` S${season} E${episode}`;
     return title;
-  }
+}
 
   async function getData(_type: MediaType) {
     const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
