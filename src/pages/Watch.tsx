@@ -16,7 +16,20 @@ export default function Watch() {
   const [episode, setEpisode] = useState(1);
   const [maxEpisodes, setMaxEpisodes] = useState(1);
   const [data, setData] = useState<Movie | Series>();
+  const [selectedServer, setSelectedServer] = useState('PRO');
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const serverURLs = {
+    PRO: `https://vidsrc.pro/embed/${type}/${id}`,
+    TO: `https://vidsrc.to/embed/${type}/${id}`,
+    SFLIX: `https://watch.streamflix.one/${type}/${id}/watch?server=1`,
+    MULTI: `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1`,
+    CLUB: `https://moviesapi.club/${type}/${id}`,
+    BINGE: `https://embed.streamflix.one/embed/${type}/${id}`,
+    XYZ: `https://vidsrc.xyz/embed/${type}/${id}`,
+    TWO: `https://www.2embed.cc/embed${type === 'tv' ? 'tv' : ''}/${id}`,
+    SS: `https://player.smashy.stream/${type}/${id}`,
+  };
 
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
@@ -33,21 +46,32 @@ export default function Watch() {
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
 
-  function getSource() {
-    let url;
-    if (type === 'movie') {
-        url = `https://vidsrc.pro/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
-    } else if (type === 'series') {
-        url = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+  function getServerURL() {
+    let url = serverURLs[selectedServer];
+    if (type === 'tv' && season && episode) {
+      if (selectedServer === 'MULTI' || selectedServer === 'TWO') {
+        url += `&s=${season}&e=${episode}`;
+      } else if (selectedServer === 'SS') {
+        url += `?s=${season}&e=${episode}`;
+      } else if (selectedServer === 'CLUB') {
+        url += `-${season}-${episode}`;
+      } else if (selectedServer === 'SFLIX') {
+        url += `&season=${season}&episode=${episode}`;
+      } else {
+        url += `/${season}/${episode}`;
+      }
+    }
+    if (selectedServer === 'PRO') {
+      url += '?&autoplay=1&theme=ff2222';
     }
     return url;
-}
+  }
 
-function getTitle() {
+  function getTitle() {
     let title = data ? data.title : 'Watch';
     if (type === 'series') title += ` S${season} E${episode}`;
     return title;
-}
+  }
 
   async function getData(_type: MediaType) {
     const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
@@ -156,13 +180,29 @@ function getTitle() {
               onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me={maxEpisodes}`)}
             ></i>
           )}
+          <select
+            name="servers"
+            value={selectedServer}
+            onChange={(e) => setSelectedServer(e.target.value)}
+            id="server-select"
+          >
+            <option value="PRO">PRO</option>
+            <option value="TO">TO</option>
+            <option value="SFLIX">SFLIX</option>
+            <option value="MULTI">MULTI</option>
+            <option value="CLUB">CLUB</option>
+            <option value="XYZ">XYZ</option>
+            <option value="BINGE">BINGE</option>
+            <option value="TWO">2EMBED</option>
+            <option value="SS">SMASHY</option>
+          </select>
         </div>
         <iframe
           scrolling="no"
           allowFullScreen
           referrerPolicy="origin"
           title={getTitle()}
-          src={getSource()}
+          src={getServerURL()}
           ref={iframeRef}
         ></iframe>
       </div>
