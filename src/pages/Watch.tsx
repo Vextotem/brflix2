@@ -36,9 +36,9 @@ export default function Watch() {
   function getSource() {
     let url;
     if (type === 'movie') {
-        url = `https://vidsrc.pro/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `https://vidsrc2.to/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     } else if (type === 'series') {
-        url = `https://vidsrc.pro/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `https://vidsrc2.to/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     }
     return url;
 }
