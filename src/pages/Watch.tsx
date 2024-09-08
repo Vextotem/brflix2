@@ -36,9 +36,9 @@ export default function Watch() {
   function getSource() {
     let url;
     if (type === 'movie') {
-        url = `https://vidlink.pro/embed/movie/${id}`;
+        url = `https://vidsrc.cc/embed/movie/${id}`;
     } else if (type === 'series') {
-        url = `https://vidlink.pro/embed/tv/${id}/${season}/${episode}`;
+        url = `https://vidsrc.cc/embed/tv/${id}/${season}/${episode}`;
     }
     return url;
 }
