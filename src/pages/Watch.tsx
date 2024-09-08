@@ -36,9 +36,9 @@ export default function Watch() {
   function getSource() {
     let url;
     if (type === 'movie') {
-        url = `https://vidsrc.cc/embed/movie/${id}`;
+        url = `https://vid.braflix.win/embed/movie/${id}`;
     } else if (type === 'series') {
-        url = `https://vidsrc.cc/embed/tv/${id}/${season}/${episode}`;
+        url = `https://vid.braflix.win/embed/tv/${id}/${season}/${episode}`;
     }
     return url;
 }
