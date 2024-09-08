@@ -36,9 +36,9 @@ export default function Watch() {
   function getSource() {
     let url;
     if (type === 'movie') {
-        url = `https://vid.braflix.win/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `https://vidlink.pro/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     } else if (type === 'series') {
-        url = `https://vid.braflix.win/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `https://vidlink.pro/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     }
     return url;
 }
