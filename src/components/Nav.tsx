@@ -84,7 +84,7 @@ export default function Nav() {
         <NavLink to="/movies">Movies</NavLink>
         <NavLink to="/series">Series</NavLink>
         <NavLink to="/list">My List</NavLink>
-        <a href="https://t.me/hdoboxapk1" target="_blank" rel="noopener noreferrer">Join Telegram</a>
+        <a href="https://t.me/hdoboxapk2" target="_blank" rel="noopener noreferrer">Join Telegram</a>
 
         <NavLink className="mobile" to="/movies">
           <i className="fa-regular fa-film"></i>
