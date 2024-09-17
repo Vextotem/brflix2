@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Movie from '@/types/Movie';
 import Series from '@/types/Series';
@@ -18,6 +18,44 @@ export default function Watch() {
   const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
+  // State to handle server selection
+  const [selectedServer, setSelectedServer] = useState('ME');
+
+  const serverURLs = {
+    ME: `https://vidsrc.xyz/embed/${type}/${id}`,
+    PRO: `https://vidsrc.pro/embed/${type}/${id}`,
+    TO: `https://vidsrc.xyz/embed/${type}/${id}`,
+    SFLIX: `https://vidsrc.in/embed/${type}/${id}`,
+    MULTI: `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1`,
+    CLUB: `https://moviesapi.club/${type}/${id}`,
+    BINGE: `https://vidsrc.to/embed/${type}/${id}`,
+    XYZ: `https://vidsrc.xyz/embed/${type}/${id}`,
+    TWO: `https://www.2embed.cc/embed${type === 'tv' ? 'tv' : ''}/${id}`,
+    SS: `https://player.smashy.stream/${type}/${id}`,
+  };
+
+  // Function to generate the server URL
+  const getServerURL = () => {
+    let url = serverURLs[selectedServer];
+    if (type === 'tv' && season && episode) {
+      if (selectedServer === 'MULTI' || selectedServer === 'TWO') {
+        url += `&s=${season}&e=${episode}`;
+      } else if (selectedServer === 'SS') {
+        url += `?s=${season}&e=${episode}`;
+      } else if (selectedServer === 'CLUB') {
+        url += `-${season}-${episode}`;
+      } else if (selectedServer === 'SFLIX') {
+        url += `&season=${season}&episode=${episode}`;
+      } else {
+        url += `/${season}/${episode}`;
+      }
+    }
+    if (selectedServer === 'PRO') {
+      url += '?&autoplay=1&theme=ff2222';
+    }
+    return url;
+  };
+
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
     const storage = localStorage.getItem('viewed');
@@ -32,22 +70,6 @@ export default function Watch() {
     viewed = viewed.slice(0, 15);
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
-
-  function getSource() {
-    let url;
-    if (type === 'movie') {
-        url = `https://vid.braflix.win/embed/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
-    } else if (type === 'series') {
-        url = `https://vid.braflix.win/embed/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
-    }
-    return url;
-}
-
-function getTitle() {
-    let title = data ? data.title : 'Watch';
-    if (type === 'series') title += ` S${season} E${episode}`;
-    return title;
-}
 
   async function getData(_type: MediaType) {
     const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
@@ -75,19 +97,6 @@ function getTitle() {
     const data = res.data;
     setMaxEpisodes(data.length);
   }
-
-  useEffect(() => {
-    if (!data) return;
-    if (!('seasons' in data)) return;
-    if (season > data.seasons) {
-      nav('/');
-      return;
-    }
-    if (episode > maxEpisodes) {
-      nav('/');
-      return;
-    }
-  }, [data, maxEpisodes]);
 
   useEffect(() => {
     const s = search.get('s');
@@ -143,7 +152,7 @@ function getTitle() {
     <>
       <Helmet>
         <title>
-          {getTitle()} - {import.meta.env.VITE_APP_NAME}
+          {data ? `${data.title} - ${import.meta.env.VITE_APP_NAME}` : 'Watch'}
         </title>
       </Helmet>
 
@@ -161,10 +170,38 @@ function getTitle() {
           scrolling="no"
           allowFullScreen
           referrerPolicy="origin"
-          title={getTitle()}
-          src={getSource()}
+          title={data ? data.title : 'Watch'}
+          src={getServerURL()}
           ref={iframeRef}
+          style={{ width: '100%', height: '100%', border: '0' }}
         ></iframe>
+      </div>
+
+      <div id="button-grid">
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <select
+            name="servers"
+            value={selectedServer}
+            onChange={(e) => setSelectedServer(e.target.value)}
+            id="server-select"
+          >
+            <option value="ME">ME</option>
+            <option value="PRO">PRO</option>
+            <option value="TO">TO</option>
+            <option value="SFLIX">SFLIX</option>
+            <option value="MULTI">MULTI</option>
+            <option value="CLUB">CLUB</option>
+            <option value="XYZ">XYZ</option>
+            <option value="BINGE">BINGE</option>
+            <option value="TWO">2EMBED</option>
+            <option value="SS">SMASHY</option>
+          </select>
+          {type === 'series' && (
+            <Link to={`/watch/${id}?s=${season}&e=${episode + 1}`} id="player-button">
+              <i className="fa-solid fa-arrow-right" style={{ fontSize: '26px' }} alt="Next"></i>
+            </Link>
+          )}
+        </div>
       </div>
     </>
   );
