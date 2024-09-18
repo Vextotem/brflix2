@@ -17,13 +17,16 @@ export default function Watch() {
   const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
+  // New state for the selected video source
   const [source, setSource] = useState<string>('Source 1');
 
+  // Array of sources
   const sources = [
     { name: 'Source 1', url: 'https://vidlink.pro/' },
     { name: 'Source 2', url: 'https://vid.braflix.win/embed' },
-    { name: 'Source 3', url: 'https://vidsrc.icu/embed' },
-    { name: 'Source 4', url: 'https://vidsrc.cc/v2/embed' }
+     { name: 'Source 3', url: 'https://vidsrc.icu/embed' },
+      { name: 'Source 4', url: 'https://muvsrc.ru/embed' },     
+    { name: 'Source 5', url: 'https://vidsrc.cc/v2/embed' }
   ];
 
   function addViewed(data: MediaShort) {
@@ -41,6 +44,7 @@ export default function Watch() {
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
 
+  // Modify getSource to include the selected source
   function getSource() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
@@ -126,11 +130,13 @@ export default function Watch() {
     };
   }, []);
 
+  // Add iframe onload event for ad removal
   useEffect(() => {
     if (iframeRef.current) {
       iframeRef.current.onload = () => {
         const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
         if (iframeDocument) {
+          // Remove ad elements by class or ID
           const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
           ads.forEach(ad => {
             ad.parentNode?.removeChild(ad);
@@ -158,6 +164,7 @@ export default function Watch() {
             ></i>
           )}
 
+          {/* Dropdown for selecting video source */}
           <select value={source} onChange={(e) => setSource(e.target.value)}>
             {sources.map((src) => (
               <option key={src.name} value={src.name}>
@@ -167,6 +174,7 @@ export default function Watch() {
           </select>
         </div>
         
+        {/* Video Player */}
         <iframe
           scrolling="no"
           allowFullScreen
