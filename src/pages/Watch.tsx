@@ -1,130 +1,186 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Movie from '@/types/Movie';
+import Series from '@/types/Series';
+import MediaType from '@/types/MediaType';
+import MediaShort from '@/types/MediaShort';
 
 export default function Watch() {
   const nav = useNavigate();
-  const { id } = useParams();  // Grabs ID from the URL
+  const { id } = useParams();
   const [search] = useSearchParams();
-  const [type, setType] = useState('movie');  // Set default type to movie
+  const [type, setType] = useState<MediaType>('movie');
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const [maxEpisodes, setMaxEpisodes] = useState(1);
-  const [selectedServer, setSelectedServer] = useState('ME');  // For the server selection
-
+  const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const serverURLs = {
-    ME: `https://vidsrc.xyz/embed/${type}/${id}`,
-    PRO: `https://vidsrc.pro/embed/${type}/${id}`,
-    TO: `https://vidsrc.xyz/embed/${type}/${id}`,
-    SFLIX: `https://vidsrc.in/embed/${type}/${id}`,
-    MULTI: `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1`,
-    CLUB: `https://moviesapi.club/${type}/${id}`,
-    BINGE: `https://vidsrc.to/embed/${type}/${id}`,
-    XYZ: `https://vidsrc.xyz/embed/${type}/${id}`,
-    TWO: `https://www.2embed.cc/embed${type === 'tv' ? 'tv' : ''}/${id}`,
-    SS: `https://player.smashy.stream/${type}/${id}`,
-  };
+  // New state for the selected video source
+  const [source, setSource] = useState<string>('Source 1');
 
-  // Function to construct the server URL dynamically
-  const getServerURL = () => {
-    let url = serverURLs[selectedServer];
-    if (type === 'tv' && season && episode) {
-      if (selectedServer === 'MULTI' || selectedServer === 'TWO') {
-        url += `&s=${season}&e=${episode}`;
-      } else if (selectedServer === 'SS') {
-        url += `?s=${season}&e=${episode}`;
-      } else if (selectedServer === 'CLUB') {
-        url += `-${season}-${episode}`;
-      } else if (selectedServer === 'SFLIX') {
-        url += `&season=${season}&episode=${episode}`;
-      } else {
-        url += `/${season}/${episode}`;
-      }
+  // Array of sources
+  const sources = [
+    { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
+    { name: 'Source 2', url: 'https://vid.braflix.win/embed' },
+    { name: 'Source 3', url: 'https://vid.braflix.win/embed' }
+  ];
+
+  function addViewed(data: MediaShort) {
+    let viewed: MediaShort[] = [];
+    const storage = localStorage.getItem('viewed');
+    if (storage) {
+      viewed = JSON.parse(storage);
+    }
+    const index = viewed.findIndex(v => v.id === data.id && v.type === data.type);
+    if (index !== -1) {
+      viewed.splice(index, 1);
+    }
+    viewed.unshift(data);
+    viewed = viewed.slice(0, 15);
+    localStorage.setItem('viewed', JSON.stringify(viewed));
+  }
+
+  // Modify getSource to include the selected source
+  function getSource() {
+    let baseSource = sources.find(s => s.name === source)?.url;
+    let url;
+    if (type === 'movie') {
+      url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+    } else if (type === 'series') {
+      url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     }
     return url;
-  };
+  }
 
-  // Update the iframe URL when selectedServer or other dependencies change
+  async function getData(_type: MediaType) {
+    const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
+    const res = await req.json();
+    if (!res.success) {
+      return;
+    }
+    const data: Movie | Series = res.data;
+    setData(data);
+    addViewed({
+      id: data.id,
+      poster: data.images.poster,
+      title: data.title,
+      type: _type,
+    });
+  }
+
+  async function getMaxEpisodes(season: number) {
+    const req = await fetch(`${import.meta.env.VITE_APP_API}/episodes/${id}?s=${season}`);
+    const res = await req.json();
+    if (!res.success) {
+      nav('/');
+      return;
+    }
+    const data = res.data;
+    setMaxEpisodes(data.length);
+  }
+
+  useEffect(() => {
+    if (!data) return;
+    if (!('seasons' in data)) return;
+    if (season > data.seasons) {
+      nav('/');
+      return;
+    }
+    if (episode > maxEpisodes) {
+      nav('/');
+      return;
+    }
+  }, [data, maxEpisodes]);
+
   useEffect(() => {
     const s = search.get('s');
     const e = search.get('e');
-    if (s && e) {
-      setSeason(parseInt(s));
-      setEpisode(parseInt(e));
-      setType('tv');
-    } else {
+    const me = search.get('me');
+    if (!s || !e) {
       setType('movie');
+      getData('movie');
+      return;
     }
-  }, [search]);
+    setSeason(parseInt(s));
+    setEpisode(parseInt(e));
+    if (me) {
+      setMaxEpisodes(parseInt(me));
+    } else {
+      getMaxEpisodes(parseInt(s));
+    }
+    setType('series');
+    getData('series');
+    localStorage.setItem(
+      'continue_' + id,
+      JSON.stringify({
+        season: parseInt(s),
+        episode: parseInt(e),
+      })
+    );
+  }, [id, search]);
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  // Add iframe onload event for ad removal
   useEffect(() => {
     if (iframeRef.current) {
-      iframeRef.current.src = getServerURL();  // Update iframe URL when server changes
+      iframeRef.current.onload = () => {
+        const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
+        if (iframeDocument) {
+          // Remove ad elements by class or ID
+          const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
+          ads.forEach(ad => {
+            ad.parentNode?.removeChild(ad);
+          });
+        }
+      };
     }
-  }, [selectedServer, season, episode]);
-
-  // Simple function to update max episodes when necessary
-  const updateMaxEpisodes = async () => {
-    if (type === 'tv') {
-      const response = await fetch(`/api/episodes/${id}?s=${season}`);
-      const data = await response.json();
-      setMaxEpisodes(data.length);
-    }
-  };
-
-  useEffect(() => {
-    if (type === 'tv') {
-      updateMaxEpisodes();
-    }
-  }, [season]);
+  }, [iframeRef.current]);
 
   return (
     <>
       <Helmet>
-        <title>{`Watch ${type === 'tv' ? `Episode ${episode}` : 'Movie'} - Your App Name`}</title>
+        <title>
+          {data?.title} - {import.meta.env.VITE_APP_NAME}
+        </title>
       </Helmet>
 
       <div className="player">
-        <iframe
-          ref={iframeRef}
-          allowFullScreen
-          scrolling="no"
-          src={getServerURL()}  // Set the iframe source dynamically
-          style={{ width: '100%', height: '100%', border: '0' }}
-        ></iframe>
-      </div>
-
-      <div id="controls">
-        <div>
-          {/* Back button */}
-          <i className="fa-solid fa-arrow-left" onClick={() => nav(-1)}></i>
-
-          {/* Server Selection Dropdown */}
-          <select
-            name="servers"
-            value={selectedServer}
-            onChange={(e) => setSelectedServer(e.target.value)}
-            id="server-select"
-          >
-            <option value="ME">ME</option>
-            <option value="PRO">PRO</option>
-            <option value="TO">TO</option>
-            <option value="SFLIX">SFLIX</option>
-            <option value="MULTI">MULTI</option>
-            <option value="CLUB">CLUB</option>
-            <option value="XYZ">XYZ</option>
-            <option value="BINGE">BINGE</option>
-            <option value="TWO">2EMBED</option>
-            <option value="SS">SMASHY</option>
-          </select>
-
-          {/* Next Episode button (if it's a TV show) */}
-          {type === 'tv' && episode < maxEpisodes && (
-            <Link to={`/watch/${id}?s=${season}&e=${episode + 1}`} className="fa-solid fa-arrow-right"></Link>
+        <div className="player-controls">
+          <i className="fa-regular fa-arrow-left" onClick={() => nav(`/${type}/${id}`)}></i>
+          {type === 'series' && episode < maxEpisodes && (
+            <i
+              className="fa-regular fa-forward-step right"
+              onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me={maxEpisodes}`)}
+            ></i>
           )}
+
+          {/* Dropdown for selecting video source */}
+          <select value={source} onChange={(e) => setSource(e.target.value)}>
+            {sources.map((src) => (
+              <option key={src.name} value={src.name}>
+                {src.name}
+              </option>
+            ))}
+          </select>
         </div>
+        
+        {/* Video Player */}
+        <iframe
+          scrolling="no"
+          allowFullScreen
+          referrerPolicy="origin"
+          title={data?.title}
+          src={getSource()}
+          ref={iframeRef}
+        ></iframe>
       </div>
     </>
   );
