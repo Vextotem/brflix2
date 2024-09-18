@@ -17,7 +17,9 @@
   <div id="root"></div>
   
  <script>
-    if (window.location.pathname !== '/') {
+    // Use sessionStorage to prevent infinite reloading
+    if (window.location.pathname !== '/' && !sessionStorage.getItem('reloaded')) {
+        sessionStorage.setItem('reloaded', 'true'); // Set the flag to prevent reloading again
         window.location.reload();
     }
 </script>
