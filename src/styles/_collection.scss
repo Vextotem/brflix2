@@ -3,21 +3,21 @@
   flex-direction: column;
   margin: 85px 0 0;
   padding: 0 60px 30px;
+}
 
-  &.overlap {
-    position: relative;
-    margin-top: -10vh;
-    z-index: 1;
-  }
+.collections.overlap {
+  position: relative;
+  margin-top: -10vh;
+  z-index: 1;
 }
 
 .collection {
   margin-top: 60px;
+}
 
-  &:first-child,
-  &:first-of-type {
-    margin-top: 0;
-  }
+.collection:first-child,
+.collection:first-of-type {
+  margin-top: 0;
 }
 
 .collection-title {
@@ -108,7 +108,7 @@
   }
 }
 
-/* New styles for the arrows */
+/* Arrow Styling */
 .arrow {
   position: absolute;
   top: 50%;
@@ -120,14 +120,22 @@
   cursor: pointer;
   z-index: 1;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Add shadow for better visibility */
 }
 
 .left-arrow {
-  left: 10px;
+  left: 0;  /* Align the arrow to the left edge */
+  margin-left: 10px; /* Add space between the edge and arrow */
 }
 
 .right-arrow {
-  right: 10px;
+  right: 0; /* Align the arrow to the right edge */
+  margin-right: 10px; /* Add space between the edge and arrow */
 }
 
 .arrow:hover {
