@@ -1,57 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
-
 import CollectionT from '@/types/Collection';
-
 import Card from './Card';
 
 export default function Collection({ title, items }: CollectionT) {
   const card = useRef<HTMLAnchorElement>(null);
-
   const [cardWidth, setCardWidth] = useState(0);
   const [index, setIndex] = useState(0);
   const [indexMax, setIndexMax] = useState(0);
 
   function onBack() {
     if (index <= 0) return;
-
     setIndex(index - 1);
   }
 
   function onNext() {
     if (index >= indexMax) return;
-
     setIndex(index + 1);
   }
 
   function onResize() {
     if (!card.current) return;
-
     const el = card.current;
-
     const cardWidth = el.clientWidth + 15;
-
     const sliderWidth = window.innerWidth - 120;
-
     const cardsCount = items.length;
     const cardsVisible = Math.floor(sliderWidth / cardWidth);
-
     const indexMax = cardsCount - cardsVisible;
-
     setCardWidth(cardWidth);
-
     if (indexMax < 0) return;
-
     setIndexMax(indexMax - 1);
   }
 
   useEffect(() => {
     if (!card.current) return;
-
     onResize();
-
     window.addEventListener('resize', onResize);
-
     return () => {
       window.removeEventListener('resize', onResize);
     };
@@ -62,10 +46,19 @@ export default function Collection({ title, items }: CollectionT) {
       <h2 className="collection-title">{title}</h2>
 
       <div className="collection-slider">
+        {/* Left Arrow */}
+        {index > 0 && (
+          <div className="arrow left-arrow" onClick={onBack}>
+            &#9664;
+          </div>
+        )}
+
         <div
           className="collection-cards"
           style={{
-            transform: `translateX(-${index * cardWidth}px)`
+            transform: `translateX(-${index * cardWidth}px)`,
+            display: 'flex',
+            transition: 'transform 0.3s ease-in-out',
           }}
         >
           {items.map((item, i) => {
@@ -73,13 +66,10 @@ export default function Collection({ title, items }: CollectionT) {
           })}
         </div>
 
-        {index > 0 && (
-          <div onClick={onBack}>
-          </div>
-        )}
-
+        {/* Right Arrow */}
         {index < indexMax && (
-          <div onClick={onNext}>
+          <div className="arrow right-arrow" onClick={onNext}>
+            &#9654;
           </div>
         )}
       </div>
