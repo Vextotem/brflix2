@@ -22,10 +22,13 @@
     margin-top: 0;
   }
 }
-
 .collection-title {
   font-size: 20px;
   font-weight: 500;
+  background-image: linear-gradient(to right, yellow, red, purple);
+  background-clip: text;
+  -webkit-background-clip: text; /* For Chrome and Safari */
+  color: transparent; /* Make the text itself transparent so the gradient shows */
 }
 
 .collection-slider {
@@ -35,13 +38,15 @@
   align-items: center;
   margin: 15px -60px 0;
   padding: 0 60px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow-x: auto; /* Allows horizontal scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling */
+  white-space: nowrap; /* Prevents items from wrapping onto the next line */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
 }
 
 .collection-slider::-webkit-scrollbar {
-  display: none;
+  display: none; /* Hides scrollbar in Chrome, Safari, and Opera */
 }
 
 .collection-cards {
