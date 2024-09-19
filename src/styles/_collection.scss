@@ -1,15 +1,12 @@
 .collections {
   display: flex;
   flex-direction: column;
-
   margin: 85px 0 0;
   padding: 0 60px 30px;
 
   &.overlap {
     position: relative;
-
     margin-top: -10vh;
-
     z-index: 1;
   }
 }
@@ -22,6 +19,7 @@
     margin-top: 0;
   }
 }
+
 .collection-title {
   font-size: 20px;
   font-weight: 500;
@@ -63,7 +61,6 @@
   min-width: calc(16.67% - 13px);
   max-width: calc(16.67% - 13px);
 }
-
 
 @media (max-width: 1200px) {
   .collection-cards .media-card {
@@ -109,4 +106,30 @@
     min-width: calc(50% - 13px);
     max-width: calc(50% - 13px);
   }
+}
+
+/* New styles for the arrows */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.left-arrow {
+  left: 10px;
+}
+
+.right-arrow {
+  right: 10px;
+}
+
+.arrow:hover {
+  background-color: rgba(0, 0, 0, 0.7); /* Darken the arrow on hover */
 }
