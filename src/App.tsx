@@ -7,13 +7,13 @@ import Index from '@/pages/Index';
 import List from '@/pages/List';
 import Search from '@/pages/Search';
 import Watch from '@/pages/Watch';
-import TraktAuth from '@/components/TraktAuth'; // Import the TraktAuth component
+import TraktAuth from '@/components/TraktAuth'; // Import TraktAuth component
 
 export default function App() {
   return (
     <BrowserRouter>
       <Nav />
-      <TraktAuth /> {/* Add the TraktAuth component here */}
+      <TraktAuth /> {/* Include TraktAuth component to handle authentication */}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/list" element={<List />} />
