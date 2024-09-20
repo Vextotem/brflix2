@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 const TraktAuth: React.FC = () => {
   const [authCode, setAuthCode] = useState<string | null>(null);
@@ -64,10 +66,12 @@ const TraktAuth: React.FC = () => {
     <div>
       <h1>Trakt.tv Integration</h1>
       {!accessToken ? (
-        <a href={traktAuthUrl} style={{ display: 'flex', alignItems: 'center' }}>
-          <i className="fa-solid fa-sign-in-alt" style={{ marginRight: '8px' }}></i>
-          Connect with Trakt.tv
-        </a>
+        <div className="top-bar-auth">
+          <a href={traktAuthUrl} style={{ display: 'flex', alignItems: 'center' }}>
+            <FontAwesomeIcon icon={faSignInAlt} style={{ marginRight: '8px' }} />
+            Connect with Trakt.tv
+          </a>
+        </div>
       ) : (
         <>
           {userData ? (
