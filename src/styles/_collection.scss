@@ -34,17 +34,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 15px -60px 0;
-  padding: 0 60px;
-  overflow-x: auto; /* Allows horizontal scrolling */
-  scroll-behavior: smooth; /* Smooth scrolling */
-  white-space: nowrap; /* Prevents items from wrapping onto the next line */
-  scrollbar-width: none; /* Hides scrollbar in Firefox */
-  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
-}
-
-.collection-slider::-webkit-scrollbar {
-  display: none; /* Hides scrollbar in Chrome, Safari, and Opera */
+  margin: 15px 0; /* Adjusted to remove the side padding */
+  overflow: hidden; /* Ensure arrows stay outside the scrollable area */
 }
 
 .collection-cards {
@@ -55,11 +46,48 @@
   min-width: 100%;
   padding-bottom: 20px;
   flex-wrap: nowrap;
+  overflow-x: auto; /* Allow horizontal scrolling only for the card content */
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.collection-cards .media-card {
-  min-width: calc(16.67% - 13px);
-  max-width: calc(16.67% - 13px);
+.collection-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.left-arrow {
+  left: 0;
+  margin-left: 10px;
+}
+
+.right-arrow {
+  right: 0;
+  margin-right: 10px;
+}
+
+.arrow:hover {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 @media (max-width: 1200px) {
