@@ -5,18 +5,32 @@ import Card from './Card';
 
 export default function Collection({ title, items }: CollectionT) {
   const card = useRef<HTMLAnchorElement>(null);
-  const [cardWidth, setCardWidth] = useState(0);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [indexMax, setIndexMax] = useState(0);
 
   function onBack() {
     if (index <= 0) return;
-    setIndex(index - 1);
+    const newIndex = index - 1;
+    setIndex(newIndex);
+    scrollToIndex(newIndex);
   }
 
   function onNext() {
     if (index >= indexMax) return;
-    setIndex(index + 1);
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    scrollToIndex(newIndex);
+  }
+
+  function scrollToIndex(newIndex: number) {
+    if (!cardsContainerRef.current || !card.current) return;
+    const cardWidth = card.current.clientWidth + 15; // Include the margin or spacing
+    const scrollPos = newIndex * cardWidth;
+    cardsContainerRef.current.scrollTo({
+      left: scrollPos,
+      behavior: 'smooth',
+    });
   }
 
   function onResize() {
@@ -27,8 +41,6 @@ export default function Collection({ title, items }: CollectionT) {
     const cardsCount = items.length;
     const cardsVisible = Math.floor(sliderWidth / cardWidth);
     const indexMax = cardsCount - cardsVisible;
-    setCardWidth(cardWidth);
-    if (indexMax < 0) return;
     setIndexMax(indexMax - 1);
   }
 
@@ -55,10 +67,11 @@ export default function Collection({ title, items }: CollectionT) {
 
         <div
           className="collection-cards"
+          ref={cardsContainerRef}
           style={{
-            transform: `translateX(-${index * cardWidth}px)`,
             display: 'flex',
-            transition: 'transform 0.3s ease-in-out',
+            overflowX: 'auto', // Allow horizontal scrolling
+            scrollBehavior: 'smooth', // Smooth scroll when using scrollTo
           }}
         >
           {items.map((item, i) => {
