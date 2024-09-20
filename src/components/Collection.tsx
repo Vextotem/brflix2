@@ -22,20 +22,14 @@ export default function Collection({ title, items }: CollectionT) {
   function onResize() {
     if (!card.current) return;
     const el = card.current;
-    const cardWidth = el.clientWidth + 15; // width of a single card including margin
-    const sliderWidth = window.innerWidth - 120; // visible width for cards
+    const cardWidth = el.clientWidth + 15;
+    const sliderWidth = window.innerWidth - 120;
     const cardsCount = items.length;
-    const cardsVisible = Math.floor(sliderWidth / cardWidth); // number of visible cards
-    const indexMax = cardsCount - cardsVisible; // max index for scrolling
-
+    const cardsVisible = Math.floor(sliderWidth / cardWidth);
+    const indexMax = cardsCount - cardsVisible;
     setCardWidth(cardWidth);
-
-    // Ensure we do not scroll beyond the last card
-    if (indexMax < 0) {
-      setIndexMax(0); // no scrolling needed if all cards fit in the view
-    } else {
-      setIndexMax(indexMax); // set max index properly
-    }
+    if (indexMax < 0) return;
+    setIndexMax(indexMax - 1);
   }
 
   useEffect(() => {
