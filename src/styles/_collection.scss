@@ -49,45 +49,17 @@
   overflow-x: auto; /* Allow horizontal scrolling only for the card content */
   scroll-behavior: smooth;
   white-space: nowrap;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
 }
 
 .collection-cards::-webkit-scrollbar {
-  display: none;
+  display: none; /* Hides scrollbar in Chrome, Safari, and Opera */
 }
 
-.arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 24px;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 1;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.left-arrow {
-  left: 0;
-  margin-left: 10px;
-}
-
-.right-arrow {
-  right: 0;
-  margin-right: 10px;
-}
-
-.arrow:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+.collection-cards .media-card {
+  min-width: calc(16.67% - 13px);
+  max-width: calc(16.67% - 13px);
 }
 
 @media (max-width: 1200px) {
@@ -157,13 +129,13 @@
 }
 
 .left-arrow {
-  left: 0;  /* Align the arrow to the left edge */
-  margin-left: 10px; /* Add space between the edge and arrow */
+  left: 0;
+  margin-left: 10px;
 }
 
 .right-arrow {
-  right: 0; /* Align the arrow to the right edge */
-  margin-right: 10px; /* Add space between the edge and arrow */
+  right: 0;
+  margin-right: 10px;
 }
 
 .arrow:hover {
