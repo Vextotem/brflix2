@@ -22,14 +22,14 @@ export default function Collection({ title, items }: CollectionT) {
   function onResize() {
     if (!card.current) return;
     const el = card.current;
-    const cardWidth = el.clientWidth + 15;
-    const sliderWidth = window.innerWidth - 120;
+    const cardWidth = el.clientWidth + 15; // width of a card plus gap
+    const sliderWidth = window.innerWidth - 120; // width of visible area minus padding
     const cardsCount = items.length;
     const cardsVisible = Math.floor(sliderWidth / cardWidth);
-    const indexMax = cardsCount - cardsVisible;
+    const indexMax = Math.max(0, cardsCount - cardsVisible); // avoid negative indexMax
     setCardWidth(cardWidth);
-    if (indexMax < 0) return;
-    setIndexMax(indexMax - 1);
+    setIndexMax(indexMax);
+    if (index > indexMax) setIndex(indexMax); // Ensure index doesn't exceed the max after resize
   }
 
   useEffect(() => {
