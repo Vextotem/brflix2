@@ -14,13 +14,11 @@ export default function Nav() {
 
   function onScroll() {
     const scrolled = window.scrollY > 0;
-
     setScrolled(scrolled);
   }
 
   function onSearchClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.preventDefault();
-
     setSearching(true);
   }
 
@@ -46,9 +44,7 @@ export default function Nav() {
 
   useEffect(() => {
     if (searchParams.has('q')) setSearch(searchParams.get('q')!);
-
     window.addEventListener('scroll', onScroll);
-
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
@@ -57,7 +53,6 @@ export default function Nav() {
   useEffect(() => {
     if (!searching) return;
     if (!inputRef.current) return;
-
     inputRef.current.focus();
 
     function onClick(e: MouseEvent) {
@@ -67,7 +62,6 @@ export default function Nav() {
     }
 
     window.addEventListener('click', onClick, { capture: true });
-
     return () => {
       window.removeEventListener('click', onClick, { capture: true });
     };
@@ -86,6 +80,11 @@ export default function Nav() {
         <NavLink to="/list">My List</NavLink>
         <a href="https://t.me/hdoboxapk2" target="_blank" rel="noopener noreferrer">Join Telegram</a>
 
+        {/* Add Trakt login link */}
+        <a href="https://trakt.tv/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=https://www.braflix.watch/" className="nav-trakt">
+          Connect with Trakt
+        </a>
+
         <NavLink className="mobile" to="/movies">
           <i className="fa-regular fa-film"></i>
         </NavLink>
@@ -98,15 +97,13 @@ export default function Nav() {
           <i className="fa-regular fa-list"></i>
         </NavLink>
 
-        <a href="https://t.me/HdoBoxApk2" className='mobile' target="_blank" rel="noopener noreferrer"><i className="fa-regular fa-comments"></i>
-        </a>
+        <a href="https://t.me/HdoBoxApk2" className='mobile' target="_blank" rel="noopener noreferrer"><i className="fa-regular fa-comments"></i></a>
       </div>
 
       <div className="top-bar-search" ref={wrapperRef}>
         {searching ? (
           <div className="top-bar-input">
             <i className="fa-regular fa-search"></i>
-
             <input type="text" ref={inputRef} value={search} placeholder="Search for a title" onChange={onSearchChange} />
           </div>
         ) : (
