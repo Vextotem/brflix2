@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 const TraktAuth: React.FC = () => {
   const [authCode, setAuthCode] = useState<string | null>(null);
@@ -19,7 +17,7 @@ const TraktAuth: React.FC = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        code: code,
+        code,
         client_id: clientId,
         client_secret: clientSecret,
         redirect_uri: redirectUri,
@@ -37,7 +35,7 @@ const TraktAuth: React.FC = () => {
 
     const response = await fetch('https://api.trakt.tv/users/me', {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'trakt-api-version': '2',
         'trakt-api-key': clientId || '',
       },
@@ -67,7 +65,7 @@ const TraktAuth: React.FC = () => {
       <h1>Trakt.tv Integration</h1>
       {!accessToken ? (
         <a href={traktAuthUrl} style={{ display: 'flex', alignItems: 'center' }}>
-          <FontAwesomeIcon icon={faSignInAlt} style={{ marginRight: '8px' }} />
+          <i className="fa-solid fa-sign-in-alt" style={{ marginRight: '8px' }}></i>
           Connect with Trakt.tv
         </a>
       ) : (
