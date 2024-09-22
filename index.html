@@ -15,7 +15,23 @@
 
 <body>
   <div id="root"></div>
-  
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Braflix",
+  "url": "https://www.braflix.watch",
+  "description": "Braflix st - Watch 1080 p HD movies online for free - Highest Rated Movies on TMDB and IMDB",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Braflix Inc.",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.braflix.watch/logo.png"
+    }
+  }
+}
+  </script>
  <script>
     // Use sessionStorage to prevent infinite reloading
     if (window.location.pathname !== '/' && !sessionStorage.getItem('reloaded')) {
