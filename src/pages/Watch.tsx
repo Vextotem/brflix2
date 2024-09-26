@@ -23,13 +23,14 @@ export default function Watch() {
   // Array of sources
   const sources = [
   { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
-    { name: 'Source 2', url: 'https://api.fmoviez.online/embed' },
-     { name: 'Source 3', url: 'https://api2.rypr.ru/embed' },
-    { name: 'Source 4', url: 'https://vidlink.pro/' },
-    { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
-     { name: 'Source 6', url: 'https://vidsrc.icu/embed' },
-      { name: 'Source 7', url: 'https://muvsrc.ru/embed' },     
-    { name: 'Source 8', url: 'https://vidsrc.cc/v2/embed' }
+     { name: 'Source 2', url: 'https://api2.rypr.ru/embed' },
+    { name: 'Source 3', url: 'https://vidlink.pro/' },
+    { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
+     { name: 'Source 5', url:
+      'https://vidsrc.icu/embed' },  
+      { name: 'Source 6', url:
+      'https://player.smashy.stream/' },     
+    { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' }
   ];
 
   function addViewed(data: MediaShort) {
