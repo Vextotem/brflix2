@@ -27,8 +27,10 @@ export default function Watch() {
     { name: 'Source 3', url: 'https://vidlink.pro/' },
     { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
      { name: 'Source 5', url:
-      'https://vidsrc.icu/embed' },       
-    { name: 'Source 6', url: 'https://vidsrc.cc/v2/embed' }
+      'https://vidsrc.icu/embed' },
+      { name: '🇳🇪 Source 6', url:
+      'https://player.autoembed.cc/embed' },       
+    { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' }
   ];
 
   function addViewed(data: MediaShort) {
