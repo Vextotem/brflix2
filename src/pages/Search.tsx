@@ -11,11 +11,11 @@ export default function Search() {
   const [searchParams] = useSearchParams();
 
   const [data, setData] = useState<MediaShort[]>([]);
-  const [popularMovies, setPopularMovies] = useState<MediaShort[]>([]); // State for popular movies
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const [loadingPopular, setLoadingPopular] = useState<boolean>(true); // Loading state for popular movies
+  const [topSearches, setTopSearches] = useState<MediaShort[]>([]); // State for top searches
 
+  // Function to get the search results based on the query
   async function getData() {
     const query = searchParams.get('q');
 
@@ -29,14 +29,14 @@ export default function Search() {
     setQuery(query);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_APP_API}/search/movie?query=${query}`); // TMDB-like search structure
+      const response = await fetch(`${import.meta.env.VITE_APP_API}/search?q=${query}`);
       const result = await response.json();
 
       if (!result.success) {
         throw new Error('Failed to fetch data');
       }
 
-      setData(result.results); // Use 'results' for search
+      setData(result.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -44,34 +44,33 @@ export default function Search() {
     }
   }
 
-  async function getPopularMovies() {
-    setLoadingPopular(true); // Set loading state for popular movies
+  // Function to fetch top searches
+  async function getTopSearches() {
     try {
-      const response = await fetch(`${import.meta.env.VITE_APP_API}/movie/popular?api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=en-US&page=1`); // TMDB-like popular movies structure
+      const response = await fetch(`${import.meta.env.VITE_APP_API}/top-searches`); // Fetching top searches from API
       const result = await response.json();
 
       if (!result.success) {
-        throw new Error('Failed to fetch popular movies');
+        throw new Error('Failed to fetch top searches');
       }
 
-      setPopularMovies(result.results); // Assuming the response structure
+      setTopSearches(result.data);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoadingPopular(false); // Reset loading state
     }
   }
 
+  // Fetch search data when searchParams changes
   useEffect(() => {
-    const timeout = setTimeout(getData, 500);
-    return () => clearTimeout(timeout);
+    if (!searchParams.get('q')) {
+      getTopSearches(); // Fetch top searches if no query is present
+    } else {
+      const timeout = setTimeout(getData, 500);
+      return () => clearTimeout(timeout);
+    }
   }, [searchParams]);
 
-  useEffect(() => {
-    getPopularMovies(); // Fetch popular movies when the component mounts
-  }, []);
-
-  if (loading || loadingPopular) {
+  if (loading) {
     return <Loading />;
   }
 
@@ -84,17 +83,21 @@ export default function Search() {
       </Helmet>
 
       <div className="page">
-        <h1 className="page-title">{query}</h1>
-        
-        {/* Display popular movies */}
-        <h2>Popular Movies</h2>
-        <div className="page-cards">
-          {popularMovies.length ? popularMovies.map(media => <Card key={media.id} {...media} />) : <p>No popular movies found</p>}
-        </div>
-
-        <div className="page-cards">
-          {data.length ? data.map(media => <Card key={media.id} {...media} />) : <p>No results found</p>}
-        </div>
+        {query ? (
+          <>
+            <h1 className="page-title">{query}</h1>
+            <div className="page-cards">
+              {data.length ? data.map(media => <Card key={media.id + media.type} {...media} />) : <p>No results found</p>}
+            </div>
+          </>
+        ) : (
+          <>
+            <h1 className="page-title">Top Searches</h1>
+            <div className="page-cards">
+              {topSearches.length ? topSearches.map(media => <Card key={media.id + media.type} {...media} />) : <p>No top searches found</p>}
+            </div>
+          </>
+        )}
       </div>
     </>
   );
