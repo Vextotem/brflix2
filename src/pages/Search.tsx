@@ -14,35 +14,50 @@ export default function Search() {
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
 
+  async function fetchPopularData() {
+    try {
+      console.log('Fetching popular data');
+      const response = await fetch(`${import.meta.env.VITE_APP_API}/popular`);
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error('Failed to fetch popular data');
+      }
+      setData(result.data);
+    } catch (error) {
+      console.error('Error fetching popular data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function fetchSearchData(query: string) {
+    try {
+      console.log('Fetching search data for query:', query);
+      const response = await fetch(`${import.meta.env.VITE_APP_API}/search?q=${query}`);
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error('Failed to fetch search data');
+      }
+      setData(result.data);
+    } catch (error) {
+      console.error('Error fetching search data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function getData() {
     const query = searchParams.get('q');
-
     setLoading(true);
     setData([]);
     setQuery(query || '');
 
-    try {
-      let response;
-      
-      if (query) {
-        // Fetch search results if a query is present
-        response = await fetch(`${import.meta.env.VITE_APP_API}/search?q=${query}`);
-      } else {
-        // Fetch popular searches if no query is present
-        response = await fetch(`${import.meta.env.VITE_APP_API}/popular`);
-      }
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error('Failed to fetch data');
-      }
-
-      setData(result.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+    if (!query) {
+      // No query present, fetch popular data
+      await fetchPopularData();
+    } else {
+      // Query present, fetch search data
+      await fetchSearchData(query);
     }
   }
 
@@ -59,7 +74,7 @@ export default function Search() {
     <>
       <Helmet>
         <title>
-          {query ? `'${query}'` : 'Search Popular'} - {import.meta.env.VITE_APP_NAME}
+          {query ? `'${query}'` : 'Popular Searches'} - {import.meta.env.VITE_APP_NAME}
         </title>
       </Helmet>
 
