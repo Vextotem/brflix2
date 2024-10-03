@@ -28,7 +28,7 @@ export default function Watch() {
     { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
-    { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' },
+    { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' } // New Source
   ];
 
