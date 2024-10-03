@@ -20,17 +20,16 @@ export default function Watch() {
   // New state for the selected video source
   const [source, setSource] = useState<string>('Source 1');
 
-  // Array of sources
+  // Array of sources including the new source
   const sources = [
-  { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
-     { name: 'Source 2', url: 'https://vidlink.pro/' },
+    { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
+    { name: 'Source 2', url: 'https://vidlink.pro/' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
-     { name: 'Source 5', url:
-      'https://vidsrc.icu/embed' },
-      { name: '🇳🇪 Source 6', url:
-      'https://player.autoembed.cc/embed' },       
-    { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' }
+    { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
+    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
+    { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' },
+    { name: 'Source 8', url: 'https://rgshows.me/player/movies/api1/index.html' } // New Source
   ];
 
   function addViewed(data: MediaShort) {
@@ -53,7 +52,12 @@ export default function Watch() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
     if (type === 'movie') {
-      url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+      if (source === 'Source 8') {
+        // Special format for the new source
+        url = `${baseSource}?id=${id}`;
+      } else {
+        url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+      }
     } else if (type === 'series') {
       url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     }
