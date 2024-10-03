@@ -29,7 +29,7 @@ export default function Watch() {
     { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
     { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' },
-    { name: 'Source 8', url: 'https://rgshows.me/player/movies/api1/index.html' } // New Source
+    { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' } // New Source
   ];
 
   function addViewed(data: MediaShort) {
@@ -52,14 +52,14 @@ export default function Watch() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
     if (type === 'movie') {
-      if (source === 'Source 8') {
+      if (source === 'Source 8 India') {
         // Special format for the new source for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
-      if (source === 'Source 8') {
+      if (source === 'Source 8 India') {
         // Special format for the new source for series
         url = `${baseSource}?id=${id}&s=${season}&e=${episode}`;
       } else {
