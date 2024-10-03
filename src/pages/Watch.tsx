@@ -22,14 +22,15 @@ export default function Watch() {
 
   // Updated array of sources with the new Source 1 URL
   const sources = [
-    { name: 'Source 1', url: 'https://rgshows.me/player/movies/api2/index.html' }, // New Source 1
-    { name: 'Source 2', url: 'https://vidlink.pro/' },
-    { name: 'Source 3', url: 'https://vidsrc.io/embed' },
-    { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
-    { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
-    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
-    { name: 'Source 7', url: 'https://vidsrc.cc/v2/embed' },
-    { name: 'Source 8', url: 'https://rgshows.me/player/movies/api1/index.html' } // Original Source 8
+   { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
+    { name: 'India', url: 'https://rgshows.me/player/movies/api2/index.html' }, // New Source 1
+    { name: 'Source 3', url: 'https://vidlink.pro/' },
+    { name: 'Source 4', url: 'https://vidsrc.io/embed' },
+    { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
+    { name: 'Source 6', url: 'https://vidsrc.icu/embed' },
+    { name: 'Source 7', url: 'https://player.autoembed.cc/embed' },       
+    { name: 'Source 8', url: 'https://vidsrc.cc/v2/embed' },
+    { name: 'Source 9', url: 'https://rgshows.me/player/movies/api1/index.html' } // Original Source 8
   ];
 
   function addViewed(data: MediaShort) {
@@ -52,8 +53,8 @@ export default function Watch() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
     if (type === 'movie') {
-      if (source === 'Source 1' || source === 'Source 8') {
-        // Use the same login format for both Source 1 and Source 8
+      if (source === 'Source 2' || source === 'Source 9') {
+        // Use the same login format for both Source 2 and Source 9
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
