@@ -29,8 +29,8 @@ export default function Watch() {
     { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
     { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
-    { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
-    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api1/index.html' },  // New Source 9 India
+    { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
+    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },  // New Source 9 India
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' }, // New Source 10 India India India India India India India India
     { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }  // New Source 11 India India
   ];
