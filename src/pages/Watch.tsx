@@ -55,7 +55,7 @@ export default function Watch() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
     if (type === 'movie') {
-      if (['Source 8 India', 'Source 9 India', 'Source 10 India India India India India India India India', 'Source 11 India'].includes(source)) {
+      if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
         // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
