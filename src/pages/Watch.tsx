@@ -20,7 +20,7 @@ export default function Watch() {
   // New state for the selected video source
   const [source, setSource] = useState<string>('Source 1');
 
-  // Array of sources including the new source
+  // Array of sources including the new sources
   const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
     { name: 'Source 2', url: 'https://vidlink.pro/' },
@@ -29,7 +29,10 @@ export default function Watch() {
     { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
     { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
-    { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' } // New Source
+    { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
+    { name: 'Source 9', url: 'https://rgshows.me/player/movies/api1/index.html' },  // New Source 9
+    { name: 'Source 10', url: 'https://rgshows.me/player/movies/api2/index.html' }, // New Source 10
+    { name: 'Source 11', url: 'https://rgshows.me/player/movies/api4/index.html' }  // New Source 11
   ];
 
   function addViewed(data: MediaShort) {
@@ -52,15 +55,15 @@ export default function Watch() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
     if (type === 'movie') {
-      if (source === 'Source 8 India') {
-        // Special format for the new source for movies
+      if (['Source 8 India', 'Source 9', 'Source 10', 'Source 11'].includes(source)) {
+        // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
-      if (source === 'Source 8 India') {
-        // Special format for the new source for series
+      if (['Source 8 India', 'Source 9', 'Source 10', 'Source 11'].includes(source)) {
+        // Special format for the new sources for series
         url = `${baseSource}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
