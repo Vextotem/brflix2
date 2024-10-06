@@ -20,34 +20,19 @@ export default function Watch() {
   // New state for the selected video source
   const [source, setSource] = useState<string>('Source 1');
 
-  // Array of sources for movies
-  const movieSources = [
+  // Array of sources including the new sources
+  const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
     { name: 'Source 2', url: 'https://vidlink.pro/' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
-    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
+    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
     { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
-    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
-    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
-    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }
-  ];
-
-  // Array of sources for series
-  const seriesSources = [
-    { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
-    { name: 'Source 2', url: 'https://vidlink.pro/' },
-    { name: 'Source 3', url: 'https://vidsrc.io/embed' },
-    { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
-    { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
-    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
-    { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
-    { name: 'Source 8 India', url: 'https://rgshows.me/player/series/api1/index.html' },
-    { name: 'Source 9 India', url: 'https://rgshows.me/player/series/api2/index.html' },
-    { name: 'Source 10 India', url: 'https://rgshows.me/player/series/api3/index.html' },
-    { name: 'Source 11 India', url: 'https://rgshows.me/player/series/api4/index.html' }
+    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },  // New Source 9 India
+    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' }, // New Source 10 India India India India India India India India
+    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }  // New Source 11 India India
   ];
 
   function addViewed(data: MediaShort) {
@@ -65,22 +50,20 @@ export default function Watch() {
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
 
-  // Modify getSource to use the correct sources for movies or series
+  // Modify getSource to include the selected source
   function getSource() {
-    const selectedSources = type === 'movie' ? movieSources : seriesSources;
-    let baseSource = selectedSources.find(s => s.name === source)?.url;
+    let baseSource = sources.find(s => s.name === source)?.url;
     let url;
-
     if (type === 'movie') {
       if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
-        // Special format for the new movie sources
+        // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
       if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
-        // Special format for the new series sources
+        // Special format for the new sources for series
         url = `${baseSource}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
@@ -169,6 +152,7 @@ export default function Watch() {
       iframeRef.current.onload = () => {
         const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
         if (iframeDocument) {
+          // Remove ad elements by class or ID
           const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
           ads.forEach(ad => {
             ad.parentNode?.removeChild(ad);
