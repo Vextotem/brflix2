@@ -33,9 +33,13 @@ export default function Watch() {
     { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }
   ];
 
-  // Define special URL structure for series for Sources 8 to 11
-  const specialSeriesSources = ['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'];
-  const specialSeriesUrl = 'https://rgshows.me/player/series/api2/index.html';
+  // Map each source to its corresponding series URL
+  const specialSeriesSourcesMap: { [key: string]: string } = {
+    'Source 8 India': 'https://rgshows.me/player/series/api1/index.html',
+    'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
+    'Source 10 India': 'https://rgshows.me/player/series/api3/index.html',
+    'Source 11 India': 'https://rgshows.me/player/series/api4/index.html'
+  };
 
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
@@ -55,18 +59,18 @@ export default function Watch() {
   function getSource() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
-    
+
     if (type === 'movie') {
-      if (specialSeriesSources.includes(source)) {
+      if (specialSeriesSourcesMap[source]) {
         // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
-      if (specialSeriesSources.includes(source)) {
-        // Use the special URL structure for series
-        url = `${specialSeriesUrl}?id=${id}&s=${season}&e=${episode}`;
+      if (specialSeriesSourcesMap[source]) {
+        // Use the special URL structure from the map for series
+        url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
