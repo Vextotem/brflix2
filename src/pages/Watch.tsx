@@ -17,10 +17,8 @@ export default function Watch() {
   const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // New state for the selected video source
   const [source, setSource] = useState<string>('Source 1');
 
-  // Array of sources including the new sources
   const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
     { name: 'Source 2', url: 'https://vidlink.pro/' },
@@ -30,10 +28,14 @@ export default function Watch() {
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
     { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
-    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },  // New Source 9 India
-    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' }, // New Source 10 India India India India India India India India
-    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }  // New Source 11 India India
+    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
+    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
+    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }
   ];
+
+  // Define special URL structure for series for Sources 8 to 11
+  const specialSeriesSources = ['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'];
+  const specialSeriesUrl = 'https://rgshows.me/player/series/api2/index.html';
 
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
@@ -50,21 +52,21 @@ export default function Watch() {
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
 
-  // Modify getSource to include the selected source
   function getSource() {
     let baseSource = sources.find(s => s.name === source)?.url;
     let url;
+    
     if (type === 'movie') {
-      if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
+      if (specialSeriesSources.includes(source)) {
         // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
-      if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
-        // Special format for the new sources for series
-        url = `${baseSource}?id=${id}&s=${season}&e=${episode}`;
+      if (specialSeriesSources.includes(source)) {
+        // Use the special URL structure for series
+        url = `${specialSeriesUrl}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
@@ -146,13 +148,11 @@ export default function Watch() {
     };
   }, []);
 
-  // Add iframe onload event for ad removal
   useEffect(() => {
     if (iframeRef.current) {
       iframeRef.current.onload = () => {
         const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
         if (iframeDocument) {
-          // Remove ad elements by class or ID
           const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
           ads.forEach(ad => {
             ad.parentNode?.removeChild(ad);
@@ -179,8 +179,6 @@ export default function Watch() {
               onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me=${maxEpisodes}`)}
             ></i>
           )}
-
-          {/* Dropdown for selecting video source */}
           <select value={source} onChange={(e) => setSource(e.target.value)}>
             {sources.map((src) => (
               <option key={src.name} value={src.name}>
@@ -190,7 +188,6 @@ export default function Watch() {
           </select>
         </div>
         
-        {/* Video Player */}
         <iframe
           scrolling="no"
           allowFullScreen
