@@ -20,14 +20,14 @@ export default function Watch() {
   // New state for the selected video source
   const [source, setSource] = useState<string>('Source 1');
 
-  // Array of sources including the new sources
-  const sources = [
+  // Array of sources for movies
+  const movieSources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
     { name: 'Source 2', url: 'https://vidlink.pro/' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
-    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
+    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
     { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
@@ -35,12 +35,19 @@ export default function Watch() {
     { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }
   ];
 
-  // Separate array for Indian sources
-  const indiaSources = [
-    'Source 8 India',
-    'Source 9 India',
-    'Source 10 India',
-    'Source 11 India'
+  // Array of sources for series
+  const seriesSources = [
+    { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
+    { name: 'Source 2', url: 'https://vidlink.pro/' },
+    { name: 'Source 3', url: 'https://vidsrc.io/embed' },
+    { name: 'Source 4', url: 'https://vidsrc.pro/embed' },
+    { name: 'Source 5', url: 'https://vidsrc.icu/embed' },
+    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
+    { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
+    { name: 'Source 8 India', url: 'https://rgshows.me/player/series/api1/index.html' },
+    { name: 'Source 9 India', url: 'https://rgshows.me/player/series/api2/index.html' },
+    { name: 'Source 10 India', url: 'https://rgshows.me/player/series/api3/index.html' },
+    { name: 'Source 11 India', url: 'https://rgshows.me/player/series/api4/index.html' }
   ];
 
   function addViewed(data: MediaShort) {
@@ -58,75 +65,57 @@ export default function Watch() {
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
 
-  // Function to construct the source URL based on type and selected source
+  // Modify getSource to use the correct sources for movies or series
   function getSource() {
-    const baseSource = sources.find(s => s.name === source)?.url;
-    if (!baseSource) {
-      console.error(`Base source not found for source name: ${source}`);
-      return '';
-    }
-
-    let url = '';
+    const selectedSources = type === 'movie' ? movieSources : seriesSources;
+    let baseSource = selectedSources.find(s => s.name === source)?.url;
+    let url;
 
     if (type === 'movie') {
-      if (indiaSources.includes(source)) {
-        // Special format for the Indian sources for movies
-        url = `${baseSource}?id=${encodeURIComponent(id)}`;
+      if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
+        // Special format for the new movie sources
+        url = `${baseSource}?id=${id}`;
       } else {
-        url = `${baseSource}/movie/${encodeURIComponent(id)}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
-      if (indiaSources.includes(source)) {
-        // Special format for the Indian sources for series
-        url = `${baseSource}?id=${encodeURIComponent(id)}&s=${encodeURIComponent(season)}&e=${encodeURIComponent(episode)}`;
+      if (['Source 8 India', 'Source 9 India', 'Source 10 India', 'Source 11 India'].includes(source)) {
+        // Special format for the new series sources
+        url = `${baseSource}?id=${id}&s=${season}&e=${episode}`;
       } else {
-        url = `${baseSource}/tv/${encodeURIComponent(id)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     }
-
-    console.log(`Constructed URL for source ${source}: ${url}`); // Debugging log
     return url;
   }
 
   async function getData(_type: MediaType) {
-    try {
-      const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
-      const res = await req.json();
-      if (!res.success) {
-        console.error('Failed to fetch data:', res);
-        return;
-      }
-      const data: Movie | Series = res.data;
-      setData(data);
-      addViewed({
-        id: data.id,
-        poster: data.images.poster,
-        title: data.title,
-        type: _type,
-      });
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
+    const res = await req.json();
+    if (!res.success) {
+      return;
     }
+    const data: Movie | Series = res.data;
+    setData(data);
+    addViewed({
+      id: data.id,
+      poster: data.images.poster,
+      title: data.title,
+      type: _type,
+    });
   }
 
   async function getMaxEpisodes(season: number) {
-    try {
-      const req = await fetch(`${import.meta.env.VITE_APP_API}/episodes/${id}?s=${season}`);
-      const res = await req.json();
-      if (!res.success) {
-        console.error('Failed to fetch episodes:', res);
-        nav('/');
-        return;
-      }
-      const data = res.data;
-      setMaxEpisodes(data.length);
-    } catch (error) {
-      console.error('Error fetching episodes:', error);
+    const req = await fetch(`${import.meta.env.VITE_APP_API}/episodes/${id}?s=${season}`);
+    const res = await req.json();
+    if (!res.success) {
       nav('/');
+      return;
     }
+    const data = res.data;
+    setMaxEpisodes(data.length);
   }
 
-  // Effect to validate season and episode
   useEffect(() => {
     if (!data) return;
     if (!('seasons' in data)) return;
@@ -138,9 +127,8 @@ export default function Watch() {
       nav('/');
       return;
     }
-  }, [data, maxEpisodes, season, episode, nav]);
+  }, [data, maxEpisodes]);
 
-  // Effect to parse URL search parameters and fetch data accordingly
   useEffect(() => {
     const s = search.get('s');
     const e = search.get('e');
@@ -150,27 +138,24 @@ export default function Watch() {
       getData('movie');
       return;
     }
-    const parsedSeason = parseInt(s, 10);
-    const parsedEpisode = parseInt(e, 10);
-    setSeason(parsedSeason);
-    setEpisode(parsedEpisode);
+    setSeason(parseInt(s));
+    setEpisode(parseInt(e));
     if (me) {
-      setMaxEpisodes(parseInt(me, 10));
+      setMaxEpisodes(parseInt(me));
     } else {
-      getMaxEpisodes(parsedSeason);
+      getMaxEpisodes(parseInt(s));
     }
     setType('series');
     getData('series');
     localStorage.setItem(
-      `continue_${id}`,
+      'continue_' + id,
       JSON.stringify({
-        season: parsedSeason,
-        episode: parsedEpisode,
+        season: parseInt(s),
+        episode: parseInt(e),
       })
     );
   }, [id, search]);
 
-  // Effect to handle body overflow
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -178,26 +163,20 @@ export default function Watch() {
     };
   }, []);
 
-  // Effect to handle iframe onload for ad removal
+  // Add iframe onload event for ad removal
   useEffect(() => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      iframe.onload = () => {
-        try {
-          const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
-          if (iframeDocument) {
-            // Remove ad elements by class or ID
-            const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
-            ads.forEach(ad => {
-              ad.parentNode?.removeChild(ad);
-            });
-          }
-        } catch (error) {
-          console.warn('Unable to access iframe content:', error);
+    if (iframeRef.current) {
+      iframeRef.current.onload = () => {
+        const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
+        if (iframeDocument) {
+          const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
+          ads.forEach(ad => {
+            ad.parentNode?.removeChild(ad);
+          });
         }
       };
     }
-  }, [source, type, id, season, episode]);
+  }, [iframeRef.current]);
 
   return (
     <>
@@ -209,27 +188,16 @@ export default function Watch() {
 
       <div className="player">
         <div className="player-controls">
-          <i 
-            className="fa-regular fa-arrow-left" 
-            onClick={() => nav(`/${type}/${id}`)}
-            title="Go Back"
-            style={{ cursor: 'pointer' }}
-          ></i>
+          <i className="fa-regular fa-arrow-left" onClick={() => nav(`/${type}/${id}`)}></i>
           {type === 'series' && episode < maxEpisodes && (
             <i
               className="fa-regular fa-forward-step right"
               onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me=${maxEpisodes}`)}
-              title="Next Episode"
-              style={{ cursor: 'pointer' }}
             ></i>
           )}
 
           {/* Dropdown for selecting video source */}
-          <select 
-            value={source} 
-            onChange={(e) => setSource(e.target.value)}
-            style={{ marginLeft: 'auto' }} // Align to the right
-          >
+          <select value={source} onChange={(e) => setSource(e.target.value)}>
             {sources.map((src) => (
               <option key={src.name} value={src.name}>
                 {src.name}
@@ -239,20 +207,14 @@ export default function Watch() {
         </div>
         
         {/* Video Player */}
-        {getSource() ? (
-          <iframe
-            key={getSource()} // Adding key to force reload when source changes
-            scrolling="no"
-            allowFullScreen
-            referrerPolicy="origin"
-            title={data?.title}
-            src={getSource()}
-            ref={iframeRef}
-            style={{ width: '100%', height: '100%', border: 'none' }}
-          ></iframe>
-        ) : (
-          <p>Loading...</p>
-        )}
+        <iframe
+          scrolling="no"
+          allowFullScreen
+          referrerPolicy="origin"
+          title={data?.title}
+          src={getSource()}
+          ref={iframeRef}
+        ></iframe>
       </div>
     </>
   );
