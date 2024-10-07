@@ -26,14 +26,14 @@ export default function Watch() {
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },       
-    { name: 'Source 7', url: 'https://vidsrc.cc/v3/embed' },
+    { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
-    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' }
+    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' },
+    { name: 'Brazil', url: 'https://embed.warezcdn.com' }  // Added Brazil source
   ];
 
-  // Map each source to its corresponding series URL
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://rgshows.me/player/series/api1/index.html',
     'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
@@ -61,14 +61,20 @@ export default function Watch() {
     let url;
 
     if (type === 'movie') {
-      if (specialSeriesSourcesMap[source]) {
+      if (source === 'Brazil') {
+        // Handle Brazil source for movies
+        url = `${baseSource}/filme/${id}`;
+      } else if (specialSeriesSourcesMap[source]) {
         // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
-      if (specialSeriesSourcesMap[source]) {
+      if (source === 'Brazil') {
+        // Handle Brazil source for series
+        url = `${baseSource}/serie/${id}/${season}/${episode}`;
+      } else if (specialSeriesSourcesMap[source]) {
         // Use the special URL structure from the map for series
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
       } else {
