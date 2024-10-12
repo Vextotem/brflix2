@@ -20,13 +20,13 @@ export default function Watch() {
   const [source, setSource] = useState<string>('Source 1');
 
   const sources = [
-    { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
+    { name: 'Source 1', url: 'https://vidsrc.xyz/embed' },
     { name: 'Source 2', url: 'https://vidlink.pro/' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' }, 
-    { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },        
+    { name: 'Alpha', url: 'https://moviesapi.club/' },        
     { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
