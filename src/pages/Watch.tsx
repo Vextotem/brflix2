@@ -37,10 +37,10 @@ export default function Watch() {
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
-    'Source 8 India': 'https://vextotem.github.io/Player/',
-    'Source 9 India': 'https://vextotem.github.io/Player/',
-    'Source 10 India': 'https://vextotem.github.io/Player/',
-    'Source 11 India': 'https://vextotem.github.io/Player/'
+    'Source 8 India': 'https://vextotem.github.io/Series-Player/',
+    'Source 9 India': 'https://vextotem.github.io/Series-Player/',
+    'Source 10 India': 'https://vextotem.github.io/Series-Player/',
+    'Source 11 India': 'https://vextotem.github.io/Series-Player/'
   };
 
   function addViewed(data: MediaShort) {
