@@ -30,6 +30,7 @@ export default function Watch() {
     { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },  
      { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },        
     { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
+    { name: 'Hindi', url: 'https://www.bharatflix.live/watch/' },
     { name: 'Source 8 India', url: 'https://vextotem.github.io/Player/' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
