@@ -30,20 +30,18 @@ export default function Watch() {
     { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },  
      { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },        
     { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
-    { name: 'Hindi 1', url: 'https://hin.autoembed.cc/embed' },
-       { name: 'Hindi 2', url: 'https://keels313ale.com/play/' },
     { name: 'Source 8 India', url: 'https://vextotem.github.io/Player/' },
-    { name: 'Source 9 India', url: 'https://autoembed.cc/embed/player.php' },
-    { name: 'Source 10 India', url: 'https://vextotem.github.io/Player/' },
-    { name: 'Source 11 India', url: 'https://vextotem.github.io/Player/' },
+    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
+    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
+    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api4/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' }  // Added Brazil source
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://vextotem.github.io/Series-Player/',
-    'Source 9 India': 'https://vextotem.github.io/Series-Player/',
-    'Source 10 India': 'https://vextotem.github.io/Series-Player/',
-    'Source 11 India': 'https://vextotem.github.io/Series-Player/'
+    'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
+    'Source 10 India': 'https://rgshows.me/player/series/api3/index.html',
+    'Source 11 India': 'https://rgshows.me/player/series/api4/index.html'
   };
 
   function addViewed(data: MediaShort) {
