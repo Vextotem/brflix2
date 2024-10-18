@@ -34,7 +34,7 @@ export default function Watch() {
     { name: 'Source 8 India', url: 'https://vextotem.github.io/Player/' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
-    { name: 'Source 11 India', url: 'https://vextotem.github.io/Bharatapi/' },
+    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' }  // Added Brazil source
   ];
 
@@ -42,7 +42,7 @@ export default function Watch() {
     'Source 8 India': 'https://vextotem.github.io/Series-Player/',
     'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
     'Source 10 India': 'https://rgshows.me/player/series/api3/index.html',
-    'Source 11 India': 'https://vextotem.github.io/Bharatapi/'
+    'Source 11 India': 'https://rgshows.me/player/series/api1/index.html'
   };
 
   function addViewed(data: MediaShort) {
