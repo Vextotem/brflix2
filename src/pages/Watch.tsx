@@ -26,7 +26,7 @@ export default function Watch() {
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
-    { name: 'PrimeWire Ads', url: 'https://www.primewire.tf/embed' }, 
+    { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' }, 
     { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },
     { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },
     { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
