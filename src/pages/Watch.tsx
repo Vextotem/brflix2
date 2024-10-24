@@ -25,17 +25,17 @@ export default function Watch() {
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
-    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
-    { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' }, 
-    { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },
-    { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },
+    { name: 'Source 6', url: 'https://player.autoembed.cc/embed' }, 
+    { name: 'PrimeWire Ads', url: 'https://www.primewire.tf/embed/' }, 
+    { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },  
+     { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },        
     { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
     { name: 'Stream', url: 'https://www.2embed.stream/embed/' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://vextotem.github.io/Player/' },
     { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
-    { name: 'Brazil', url: 'https://embed.warezcdn.com' }
+    { name: 'Brazil', url: 'https://embed.warezcdn.com' }  // Added Brazil source
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
@@ -68,9 +68,6 @@ export default function Watch() {
       if (source === 'Brazil') {
         // Handle Brazil source for movies
         url = `${baseSource}/filme/${id}`;
-      } else if (source === 'PrimeWire') {
-        // Handle PrimeWire for movies
-        url = `${baseSource}/movie?tmdb=${id}`;
       } else if (specialSeriesSourcesMap[source]) {
         // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
@@ -81,9 +78,6 @@ export default function Watch() {
       if (source === 'Brazil') {
         // Handle Brazil source for series
         url = `${baseSource}/serie/${id}/${season}/${episode}`;
-      } else if (source === 'PrimeWire') {
-        // Handle PrimeWire for series
-        url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
       } else if (specialSeriesSourcesMap[source]) {
         // Use the special URL structure from the map for series
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
