@@ -26,78 +26,68 @@ export default function Watch() {
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
-    { name: 'VIP 4K', url: 'https://multiembed.mov/directstream.php' }, // Added VIP 4K
+    { name: 'VIP 4K', url: 'https://multiembed.mov/directstream.php' },
     { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },
     { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },
     { name: 'Source 7', url: 'https://vidsrc.dev/embed' },
     { name: 'Stream', url: 'https://www.2embed.stream/embed/' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
-    { name: 'Source 10 India', url: 'https://vextotem.github.io/Player/' },
-    { name: 'Source 11 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
+    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' }
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://rgshows.me/player/series/api3/index.html',
     'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
-    'Source 10 India': 'https://vextotem.github.io/Series-Player/',
-    'Source 11 India': 'https://rgshows.me/player/series/api1/index.html'
+    'Source 10 India': 'https://rgshows.me/player/series/api1/index.html'
   };
 
   function addViewed(data: MediaShort) {
-    let viewed: MediaShort[] = [];
-    const storage = localStorage.getItem('viewed');
-    if (storage) {
-      viewed = JSON.parse(storage);
-    }
-    const index = viewed.findIndex(v => v.id === data.id && v.type === data.type);
-    if (index !== -1) {
-      viewed.splice(index, 1);
-    }
+    let viewed: MediaShort[] = JSON.parse(localStorage.getItem('viewed') || '[]');
+    viewed = viewed.filter(v => v.id !== data.id || v.type !== data.type);
     viewed.unshift(data);
-    viewed = viewed.slice(0, 15);
-    localStorage.setItem('viewed', JSON.stringify(viewed));
+    localStorage.setItem('viewed', JSON.stringify(viewed.slice(0, 15)));
   }
 
   function getSource() {
-    let baseSource = sources.find(s => s.name === source)?.url;
-    let url;
+    const baseSource = sources.find(s => s.name === source)?.url;
 
-    if (type === 'movie') {
-      if (source === 'Brazil') {
-        url = `${baseSource}/filme/${id}`;
-      } else if (source === 'PrimeWire') {
-        url = `${baseSource}/movie?tmdb=${id}`;
-      } else if (source === 'VIP 4K') { // Handle VIP 4K for movies
-        url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
-      } else if (specialSeriesSourcesMap[source]) {
-        url = `${baseSource}?id=${id}`;
-      } else {
-        url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
-      }
-    } else if (type === 'series') {
-      if (source === 'Brazil') {
-        url = `${baseSource}/serie/${id}/${season}/${episode}`;
-      } else if (source === 'PrimeWire') {
-        url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-      } else if (source === 'VIP 4K') { // Handle VIP 4K for series
-        url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
-      } else if (specialSeriesSourcesMap[source]) {
-        url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
-      } else {
-        url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
-      }
+    const isMovie = type === 'movie';
+    const isSpecialSource = specialSeriesSourcesMap[source];
+
+    if (isMovie) {
+      return source === 'Brazil'
+        ? `${baseSource}/filme/${id}`
+        : source === 'PrimeWire'
+        ? `${baseSource}/movie?tmdb=${id}`
+        : source === 'VIP 4K'
+        ? `${baseSource}?video_id=${id}&tmdb=1&check=1`
+        : isSpecialSource
+        ? `${isSpecialSource}?id=${id}`
+        : `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+    } else {
+      return source === 'Brazil'
+        ? `${baseSource}/serie/${id}/${season}/${episode}`
+        : source === 'PrimeWire'
+        ? `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`
+        : source === 'VIP 4K'
+        ? `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`
+        : isSpecialSource
+        ? `${isSpecialSource}?id=${id}&s=${season}&e=${episode}`
+        : `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
     }
-    return url;
+  }
+
+  async function fetchAndCacheSources() {
+    const sourceUrls = sources.map(src => src.url);
+    await Promise.all(sourceUrls.map(url => fetch(url))); // Prefetching all sources
   }
 
   async function getData(_type: MediaType) {
     const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
     const res = await req.json();
-    if (!res.success) {
-      return;
-    }
+    if (!res.success) return;
     const data: Movie | Series = res.data;
     setData(data);
     addViewed({
@@ -115,20 +105,13 @@ export default function Watch() {
       nav('/');
       return;
     }
-    const data = res.data;
-    setMaxEpisodes(data.length);
+    setMaxEpisodes(res.data.length);
   }
 
   useEffect(() => {
-    if (!data) return;
-    if (!('seasons' in data)) return;
-    if (season > data.seasons) {
+    if (!data || !('seasons' in data)) return;
+    if (season > data.seasons || episode > maxEpisodes) {
       nav('/');
-      return;
-    }
-    if (episode > maxEpisodes) {
-      nav('/');
-      return;
     }
   }, [data, maxEpisodes]);
 
@@ -136,6 +119,7 @@ export default function Watch() {
     const s = search.get('s');
     const e = search.get('e');
     const me = search.get('me');
+
     if (!s || !e) {
       setType('movie');
       getData('movie');
@@ -150,17 +134,12 @@ export default function Watch() {
     }
     setType('series');
     getData('series');
-    localStorage.setItem(
-      'continue_' + id,
-      JSON.stringify({
-        season: parseInt(s),
-        episode: parseInt(e),
-      })
-    );
+    localStorage.setItem('continue_' + id, JSON.stringify({ season: parseInt(s), episode: parseInt(e) }));
   }, [id, search]);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    fetchAndCacheSources(); // Prefetch sources on page load
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -169,13 +148,8 @@ export default function Watch() {
   useEffect(() => {
     if (iframeRef.current) {
       iframeRef.current.onload = () => {
-        const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
-        if (iframeDocument) {
-          const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
-          ads.forEach(ad => {
-            ad.parentNode?.removeChild(ad);
-          });
-        }
+        const ads = iframeRef.current?.contentDocument?.querySelectorAll('.ad-class, #ad-id');
+        ads?.forEach(ad => ad.parentNode?.removeChild(ad));
       };
     }
   }, [iframeRef.current]);
