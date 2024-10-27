@@ -16,7 +16,6 @@ export default function Watch() {
   const [maxEpisodes, setMaxEpisodes] = useState(1);
   const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
   const [source, setSource] = useState<string>('Source 1');
 
   const sources = [
@@ -26,7 +25,8 @@ export default function Watch() {
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
     { name: 'Source 6', url: 'https://player.autoembed.cc/embed' },
-    { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' }, 
+    { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
+    { name: 'VIP 4K', url: 'https://multiembed.mov/directstream.php' }, // Added VIP 4K
     { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },
     { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },
     { name: 'Source 7', url: 'https://vidsrc.dev/embed' },
@@ -66,26 +66,24 @@ export default function Watch() {
 
     if (type === 'movie') {
       if (source === 'Brazil') {
-        // Handle Brazil source for movies
         url = `${baseSource}/filme/${id}`;
       } else if (source === 'PrimeWire') {
-        // Handle PrimeWire for movies
         url = `${baseSource}/movie?tmdb=${id}`;
+      } else if (source === 'VIP 4K') { // Handle VIP 4K for movies
+        url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
-        // Special format for the new sources for movies
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
       }
     } else if (type === 'series') {
       if (source === 'Brazil') {
-        // Handle Brazil source for series
         url = `${baseSource}/serie/${id}/${season}/${episode}`;
       } else if (source === 'PrimeWire') {
-        // Handle PrimeWire for series
         url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
+      } else if (source === 'VIP 4K') { // Handle VIP 4K for series
+        url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
-        // Use the special URL structure from the map for series
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
@@ -211,10 +209,9 @@ export default function Watch() {
         <iframe
           scrolling="no"
           allowFullScreen
-          referrerPolicy="origin"
-          title={data?.title}
           src={getSource()}
           ref={iframeRef}
+          style={{ width: '100%', height: '100%', border: 'none' }}
         ></iframe>
       </div>
     </>
