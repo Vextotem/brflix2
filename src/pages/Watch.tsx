@@ -21,7 +21,7 @@ export default function Watch() {
 
   const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
-    { name: 'Source 2', url: 'https://vidlink.pro/' },
+    { name: 'Source 2', url: 'https://wrapurl.pages.dev/redirect.html?fw=https%3A%2F%2Fvidlink.pro%2F' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed' },
