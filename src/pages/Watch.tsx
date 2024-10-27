@@ -29,7 +29,7 @@ export default function Watch() {
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' }, 
     { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },
     { name: 'Beta No Ads', url: 'https://vidsrc.rip/embed/' },
-    { name: 'Source 7', url: 'https://vidbinge.dev/embed' },
+    { name: 'Source 7', url: 'https://vidsrc.dev/embed' },
     { name: 'Stream', url: 'https://www.2embed.stream/embed/' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
