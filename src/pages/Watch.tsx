@@ -27,7 +27,7 @@ export default function Watch() {
     { name: 'Stream 6', url: 'https://www.2embed.stream/embed/' },
     { name: 'Source 7', url: 'https://player.autoembed.cc/embed' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
-    { name: 'Alpha No Ads', url: 'https://player.vidsrc.nl/embed/' },
+    { name: 'Hindi', url: 'https://hindi.vidsrc.nl/embed' },
     { name: 'VidHide', url: 'https://node.hyplexnetworks.pw/embed' },
     { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
