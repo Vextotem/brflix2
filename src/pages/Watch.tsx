@@ -21,6 +21,9 @@ export default function Watch() {
   const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
     { name: 'Source 2', url: 'https://wrapurl.pages.dev/redirect.html?fw=https%3A%2F%2Fvidlink.pro%2F' },
+    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
+    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html' },
+    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed/' },
@@ -35,9 +38,6 @@ export default function Watch() {
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
-    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
-    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html' },
-    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
@@ -48,7 +48,7 @@ export default function Watch() {
     'Megacloud': 'https://api.vidsrc.win/indextv.html',
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
   };
-
+    
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
     const storage = localStorage.getItem('viewed');
