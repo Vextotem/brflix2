@@ -17,13 +17,9 @@ export default function Watch() {
   const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [source, setSource] = useState<string>('Source 1');
-
-  const sources = [
+const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
     { name: 'Source 2', url: 'https://wrapurl.pages.dev/redirect.html?fw=https%3A%2F%2Fvidlink.pro%2F' },
-    { name: 'Upcloud', url: `https://api.vidsrc.win/${type === 'movie' ? 'upcloud.html?id=' + id : 'upcloudtv.html?id=' + id + '&s=' + season + '&e=' + episode}` },
-    { name: 'Megacloud', url: `https://api.vidsrc.win/${type === 'movie' ? 'megacloud.html?id=' + id : 'indextv.html?id=' + id + '&s=' + season + '&e=' + episode}` },
-    { name: 'Hindi HD', url: `https://api.vidsrc.win/${type === 'movie' ? 'hindi.html?id=' + id : 'hinditv.html?id=' + id + '&s=' + season + '&e=' + episode}` },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed/' },
@@ -33,17 +29,24 @@ export default function Watch() {
     { name: 'Hindi', url: 'https://hindi.vidsrc.nl/embed' },
     { name: 'English', url: 'https://english.vidsrc.nl/embed/' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
-    { name: 'NEW VIP 4K', url: 'https://vidsrc.dev/embed' },
+    { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
-    { name: 'Brazil', url: 'https://embed.warezcdn.com' }
-  ];
+    { name: 'Brazil', url: 'https://embed.warezcdn.com' },
+    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html?id=945961' },
+    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html?id=945961' },
+    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html?id=945961' }
+];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
+  
     'Source 8 India': 'https://rgshows.me/player/series/api3/index.html',
     'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
-    'Source 10 India': 'https://rgshows.me/player/series/api1/index.html'
+    'Source 10 India': 'https://rgshows.me/player/series/api1/index.html',
+    'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
+    'Megacloud': 'https://api.vidsrc.win/indextv.html',
+    'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
   };
 
   function addViewed(data: MediaShort) {
@@ -70,7 +73,7 @@ export default function Watch() {
         url = `${baseSource}/filme/${id}`;
       } else if (source === 'PrimeWire') {
         url = `${baseSource}/movie?tmdb=${id}`;
-      } else if (source === 'VIP 4K') {
+      } else if (source === 'VIP 4K') { // Handle VIP 4K for movies
         url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${baseSource}?id=${id}`;
@@ -82,7 +85,7 @@ export default function Watch() {
         url = `${baseSource}/serie/${id}/${season}/${episode}`;
       } else if (source === 'PrimeWire') {
         url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-      } else if (source === 'VIP 4K') {
+      } else if (source === 'VIP 4K') { // Handle VIP 4K for series
         url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
@@ -191,61 +194,29 @@ export default function Watch() {
 
       <div className="player">
         <div className="player-controls">
-          <i className="fa-regular fa-forward"
-              onClick={() => setEpisode(prev => prev + 1)}
-            ></i>
-          )}
-          {type === 'series' && episode > 1 && (
+          <i className="fa-regular fa-arrow-left" onClick={() => nav(`/${type}/${id}`)}></i>
+          {type === 'series' && episode < maxEpisodes && (
             <i
-              className="fa-regular fa-backward"
-              onClick={() => setEpisode(prev => prev - 1)}
+              className="fa-regular fa-forward-step right"
+              onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me=${maxEpisodes}`)}
             ></i>
           )}
-          <select
-            value={source}
-            onChange={e => setSource(e.target.value)}
-            className="source-selector"
-          >
-            {sources.map(src => (
+          <select value={source} onChange={(e) => setSource(e.target.value)}>
+            {sources.map((src) => (
               <option key={src.name} value={src.name}>
                 {src.name}
               </option>
             ))}
           </select>
         </div>
-
+        
         <iframe
-          ref={iframeRef}
-          src={getSource()}
-          frameBorder="0"
+          scrolling="no"
           allowFullScreen
-          className="video-iframe"
+          src={getSource()}
+          ref={iframeRef}
+          style={{ width: '100%', height: '100%', border: 'none' }}
         ></iframe>
-
-        {type === 'series' && (
-          <div className="episode-controls">
-            <label>
-              Season:
-              <input
-                type="number"
-                min="1"
-                max={data && 'seasons' in data ? data.seasons : 1}
-                value={season}
-                onChange={e => setSeason(parseInt(e.target.value))}
-              />
-            </label>
-            <label>
-              Episode:
-              <input
-                type="number"
-                min="1"
-                max={maxEpisodes}
-                value={episode}
-                onChange={e => setEpisode(parseInt(e.target.value))}
-              />
-            </label>
-          </div>
-        )}
       </div>
     </>
   );
