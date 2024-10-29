@@ -35,9 +35,9 @@ export default function Watch() {
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
-    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html?id=945961' },
-    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html?id=945961' },
-    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html?id=945961' },
+    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
+    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html' },
+    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
