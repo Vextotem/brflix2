@@ -35,18 +35,18 @@ export default function Watch() {
     { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
     { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
-    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html?id=945961' },
-    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html?id=945961' },
-    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html?id=945961' },
+    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html?id=' },
+    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html?id=' },
+    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html?id=' },
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://rgshows.me/player/series/api3/index.html',
     'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
     'Source 10 India': 'https://rgshows.me/player/series/api1/index.html',
-    'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
-    'Megacloud': 'https://api.vidsrc.win/indextv.html',
-    'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
+    'Upcloud': 'https://api.vidsrc.win/upcloudtv.html?id=',
+    'Megacloud': 'https://api.vidsrc.win/indextv.html?id=',
+    'Hindi HD': 'https://api.vidsrc.win/hinditv.html?id=',
   };
 
   function addViewed(data: MediaShort) {
@@ -65,35 +65,19 @@ export default function Watch() {
   }
 
   function getSource() {
-    let baseSource = sources.find(s => s.name === source)?.url;
+    let baseSource = type === 'movie' ? sources.find(s => s.name === source)?.url : specialSeriesSourcesMap[source];
     let url;
 
     if (type === 'movie') {
-      if (source === 'Brazil') {
-        url = `${baseSource}/filme/${id}`;
-      } else if (source === 'PrimeWire') {
-        url = `${baseSource}/movie?tmdb=${id}`;
-      } else if (source === 'NEW VIP 4K') { // Handle VIP 4K for movies
-        url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
-      } else if (specialSeriesSourcesMap[source]) {
-        url = `${baseSource}?id=${id}`;
-      } else {
-        url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+      if (baseSource) {
+        url = `${baseSource}${id}`;
       }
     } else if (type === 'series') {
-      if (source === 'Brazil') {
-        url = `${baseSource}/serie/${id}/${season}/${episode}`;
-      } else if (source === 'PrimeWire') {
-        url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-      } else if (source === 'NEW VIP 4K') { // Handle VIP 4K for series
-        url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
-      } else if (specialSeriesSourcesMap[source]) {
-        url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
-      } else {
-        url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+      if (baseSource) {
+        url = `${baseSource}${id}&s=${season}&e=${episode}`;
       }
     }
-    return url;
+    return url || '';
   }
 
   async function getData(_type: MediaType) {
@@ -202,21 +186,20 @@ export default function Watch() {
             ></i>
           )}
           <select value={source} onChange={e => setSource(e.target.value)}>
-            {sources.map((s, index) => (
-              <option key={index} value={s.name}>
-                {s.name}
+            {sources.map((src) => (
+              <option key={src.name} value={src.name}>
+                {src.name}
               </option>
             ))}
           </select>
         </div>
         <iframe
-          ref={iframeRef}
-          src={getSource()}
-          width="100%"
-          height="100%"
+          scrolling="no"
           allowFullScreen
-          title="Video Player"
-        />
+          src={getSource()}
+          ref={iframeRef}
+          style={{ width: '100%', height: '100%', border: 'none' }}
+        ></iframe>
       </div>
     </>
   );
