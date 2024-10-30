@@ -16,11 +16,10 @@ export default function Watch() {
   const [maxEpisodes, setMaxEpisodes] = useState(1);
   const [data, setData] = useState<Movie | Series>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [source, setSource] = useState<string>('Source 1');
 
   const sources = [
     { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
-    { name: 'Source 2', url: 'https://wrapurl.pages.dev/redirect.html?fw=https%3A%2F%2Fvidlink.pro%2F' },
+    { name: 'Source 2', url: 'https://vidlink.pro/' },
     { name: 'Source 3', url: 'https://vidsrc.io/embed' },
     { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
     { name: 'Source 5', url: 'https://vidsrc.pro/embed/' },
@@ -31,23 +30,24 @@ export default function Watch() {
     { name: 'English', url: 'https://english.vidsrc.nl/embed/' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
     { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
-    { name: 'Source 8 India', url: 'https://rgshows.me/player/movies/api3/index.html' },
-    { name: 'Source 9 India', url: 'https://rgshows.me/player/movies/api2/index.html' },
-    { name: 'Source 10 India', url: 'https://rgshows.me/player/movies/api1/index.html' },
+    { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
+    { name: 'Source 9 India', url: 'https://api.vidsrc.win/embed.html' },
+    { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
-    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
-    { name: 'Megacloud', url: 'https://api.vidsrc.win/megacloud.html' },
-    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
-    'Source 8 India': 'https://rgshows.me/player/series/api3/index.html',
-    'Source 9 India': 'https://rgshows.me/player/series/api2/index.html',
-    'Source 10 India': 'https://rgshows.me/player/series/api1/index.html',
+    'Source 8 India': 'https://api.vidsrc.win/greentv.html',
+    'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
+    'Source 10 India': 'https://api.vidsrc.win/apitv.html',
     'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
     'Megacloud': 'https://api.vidsrc.win/indextv.html',
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
   };
+
+  const [source, setSource] = useState<string>(
+    localStorage.getItem('selectedSource') || 'Source 1'
+  );
 
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
@@ -73,24 +73,24 @@ export default function Watch() {
         url = `${baseSource}/filme/${id}`;
       } else if (source === 'PrimeWire') {
         url = `${baseSource}/movie?tmdb=${id}`;
-      } else if (source === 'NEW VIP 4K') { // Handle VIP 4K for movies
+      } else if (source === 'NEW VIP 4K') {
         url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${baseSource}?id=${id}`;
       } else {
-        url = `${baseSource}/movie/${id}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `${baseSource}/movie/${id}`;
       }
     } else if (type === 'series') {
       if (source === 'Brazil') {
         url = `${baseSource}/serie/${id}/${season}/${episode}`;
       } else if (source === 'PrimeWire') {
         url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-      } else if (source === 'NEW VIP 4K') { // Handle VIP 4K for series
+      } else if (source === 'NEW VIP 4K') {
         url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
       } else {
-        url = `${baseSource}/tv/${id}/${season}/${episode}?sub_url=https%3A%2F%2Fvidsrc.me%2Fsample.srt&ds_langs=en,de`;
+        url = `${baseSource}/tv/${id}/${season}/${episode}`;
       }
     }
     return url;
@@ -184,6 +184,10 @@ export default function Watch() {
     }
   }, [iframeRef.current]);
 
+  useEffect(() => {
+    localStorage.setItem('selectedSource', source);
+  }, [source]);
+
   return (
     <>
       <Helmet>
@@ -201,7 +205,10 @@ export default function Watch() {
               onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me=${maxEpisodes}`)}
             ></i>
           )}
-          <select value={source} onChange={e => setSource(e.target.value)}>
+          <select
+            value={source}
+            onChange={e => setSource(e.target.value)}
+          >
             {sources.map((s, index) => (
               <option key={index} value={s.name}>
                 {s.name}
