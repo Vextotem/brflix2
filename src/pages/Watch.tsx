@@ -29,20 +29,23 @@ export default function Watch() {
     { name: 'Hindi', url: 'https://hindi.vidsrc.nl/embed' },
     { name: 'English', url: 'https://english.vidsrc.nl/embed/' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
-    { name: 'NEW VIP 4K', url: 'https://vidsrc.dev/embed' },
+    { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
     { name: 'Source 9 India', url: 'https://api.vidsrc.win/embed.html' },
     { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
-    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloudtv.html' },
-    { name: 'Megacloud', url: 'https://api.vidsrc.win/indextv.html' },
-    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hinditv.html' },
+     { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
+     { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
+        { name: 'Hindi HD', url: 'https://api.vidsrc.win/index.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://api.vidsrc.win/greentv.html',
     'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
-    'Source 10 India': 'https://api.vidsrc.win/apitv.html'
+    'Source 10 India': 'https://api.vidsrc.win/apitv.html',
+      'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
+    'Megacloud': 'https://api.vidsrc.win/indext.html',
+    'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
   };
 
   const [source, setSource] = useState<string>(
@@ -65,10 +68,9 @@ export default function Watch() {
   }
 
   function getSource() {
-    const baseSource = sources.find(s => s.name === source)?.url;
-    if (!baseSource) return '';
-
+    let baseSource = sources.find(s => s.name === source)?.url;
     let url;
+
     if (type === 'movie') {
       if (source === 'Brazil') {
         url = `${baseSource}/filme/${id}`;
@@ -100,8 +102,9 @@ export default function Watch() {
   async function getData(_type: MediaType) {
     const req = await fetch(`${import.meta.env.VITE_APP_API}/${_type}/${id}`);
     const res = await req.json();
-    if (!res.success) return;
-
+    if (!res.success) {
+      return;
+    }
     const data: Movie | Series = res.data;
     setData(data);
     addViewed({
@@ -119,12 +122,20 @@ export default function Watch() {
       nav('/');
       return;
     }
-    setMaxEpisodes(res.data.length);
+    const data = res.data;
+    setMaxEpisodes(data.length);
   }
 
   useEffect(() => {
-    if (!data || !('seasons' in data) || season > data.seasons || episode > maxEpisodes) {
+    if (!data) return;
+    if (!('seasons' in data)) return;
+    if (season > data.seasons) {
       nav('/');
+      return;
+    }
+    if (episode > maxEpisodes) {
+      nav('/');
+      return;
     }
   }, [data, maxEpisodes]);
 
@@ -148,7 +159,10 @@ export default function Watch() {
     getData('series');
     localStorage.setItem(
       'continue_' + id,
-      JSON.stringify({ season: parseInt(s), episode: parseInt(e) })
+      JSON.stringify({
+        season: parseInt(s),
+        episode: parseInt(e),
+      })
     );
   }, [id, search]);
 
@@ -165,11 +179,13 @@ export default function Watch() {
         const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
         if (iframeDocument) {
           const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
-          ads.forEach(ad => ad.parentNode?.removeChild(ad));
+          ads.forEach(ad => {
+            ad.parentNode?.removeChild(ad);
+          });
         }
       };
     }
-  }, [iframeRef]);
+  }, [iframeRef.current]);
 
   useEffect(() => {
     localStorage.setItem('selectedSource', source);
@@ -182,6 +198,7 @@ export default function Watch() {
           {data?.title} - {import.meta.env.VITE_APP_NAME}
         </title>
       </Helmet>
+
       <div className="player">
         <div className="player-controls">
           <i className="fa-regular fa-arrow-left" onClick={() => nav(`/${type}/${id}`)}></i>
@@ -191,7 +208,10 @@ export default function Watch() {
               onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me=${maxEpisodes}`)}
             ></i>
           )}
-          <select value={source} onChange={e => setSource(e.target.value)}>
+          <select
+            value={source}
+            onChange={e => setSource(e.target.value)}
+          >
             {sources.map((s, index) => (
               <option key={index} value={s.name}>
                 {s.name}
@@ -199,4 +219,15 @@ export default function Watch() {
             ))}
           </select>
         </div>
-        
+        <iframe
+          ref={iframeRef}
+          src={getSource()}
+          width="100%"
+          height="100%"
+          allowFullScreen
+          title="Video Player"
+        />
+      </div>
+    </>
+  );
+}
