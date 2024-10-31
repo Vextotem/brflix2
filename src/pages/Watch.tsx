@@ -35,7 +35,8 @@ export default function Watch() {
     { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
      { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
      { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
-        { name: 'Hindi HD', url: 'https://api.vidsrc.win/index.html' },
+        { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
+        { name: 'Vidcloud', url: 'https://api.vidsrc.win/vidcloud.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
   ];
 
@@ -44,8 +45,9 @@ export default function Watch() {
     'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
     'Source 10 India': 'https://api.vidsrc.win/apitv.html',
       'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
-    'Megacloud': 'https://api.vidsrc.win/indext.html',
-    'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
+    'Megacloud': 'https://api.vidsrc.win/indextv.html',
+    'Hindi HD': 'https://api.vidsrc.win/hinditv.html',
+    'Vidcloud': 'https://api.vidsrc.win/vidcloudtv.html'
   };
 
   const [source, setSource] = useState<string>(
