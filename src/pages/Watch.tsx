@@ -29,14 +29,13 @@ export default function Watch() {
     { name: 'Hindi', url: 'https://hindi.vidsrc.nl/embed' },
     { name: 'English', url: 'https://english.vidsrc.nl/embed/' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
-    { name: 'NEW VIP 4K', url: 'https://vidsrc.dev/embed' },
+    { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
     { name: 'Source 9 India', url: 'https://api.vidsrc.win/embed.html' },
     { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
-    { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
-    { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
-    { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
-    { name: 'Vidcloud', url: 'https://api.vidsrc.win/vidcloud.html' },
+     { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
+     { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
+        { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
   ];
 
@@ -44,17 +43,14 @@ export default function Watch() {
     'Source 8 India': 'https://api.vidsrc.win/greentv.html',
     'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
     'Source 10 India': 'https://api.vidsrc.win/apitv.html',
-    'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
+      'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
     'Megacloud': 'https://api.vidsrc.win/indextv.html',
-    'Hindi HD': 'https://api.vidsrc.win/hinditv.html',
-    'Vidcloud': 'https://api.vidsrc.win/vidcloudtv.html',
+    'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
   };
 
   const [source, setSource] = useState<string>(
     localStorage.getItem('selectedSource') || 'Source 1'
   );
-
-  const preloadRefs = useRef<{ [key: string]: HTMLIFrameElement | null }>({});
 
   function addViewed(data: MediaShort) {
     let viewed: MediaShort[] = [];
@@ -71,32 +67,31 @@ export default function Watch() {
     localStorage.setItem('viewed', JSON.stringify(viewed));
   }
 
-  function getSourceUrl(sourceName: string) {
-    const baseSource = sources.find(s => s.name === sourceName)?.url;
-    if (!baseSource) return '';
-
+  function getSource() {
+    let baseSource = sources.find(s => s.name === source)?.url;
     let url;
+
     if (type === 'movie') {
-      if (sourceName === 'Brazil') {
+      if (source === 'Brazil') {
         url = `${baseSource}/filme/${id}`;
-      } else if (sourceName === 'PrimeWire') {
+      } else if (source === 'PrimeWire') {
         url = `${baseSource}/movie?tmdb=${id}`;
-      } else if (sourceName === 'NEW VIP 4K') {
+      } else if (source === 'NEW VIP 4K') {
         url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
-      } else if (specialSeriesSourcesMap[sourceName]) {
+      } else if (specialSeriesSourcesMap[source]) {
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}`;
       }
     } else if (type === 'series') {
-      if (sourceName === 'Brazil') {
+      if (source === 'Brazil') {
         url = `${baseSource}/serie/${id}/${season}/${episode}`;
-      } else if (sourceName === 'PrimeWire') {
+      } else if (source === 'PrimeWire') {
         url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-      } else if (sourceName === 'NEW VIP 4K') {
+      } else if (source === 'NEW VIP 4K') {
         url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
-      } else if (specialSeriesSourcesMap[sourceName]) {
-        url = `${specialSeriesSourcesMap[sourceName]}?id=${id}&s=${season}&e=${episode}`;
+      } else if (specialSeriesSourcesMap[source]) {
+        url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}`;
       }
@@ -179,6 +174,20 @@ export default function Watch() {
   }, []);
 
   useEffect(() => {
+    if (iframeRef.current) {
+      iframeRef.current.onload = () => {
+        const iframeDocument = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
+        if (iframeDocument) {
+          const ads = iframeDocument.querySelectorAll('.ad-class, #ad-id');
+          ads.forEach(ad => {
+            ad.parentNode?.removeChild(ad);
+          });
+        }
+      };
+    }
+  }, [iframeRef.current]);
+
+  useEffect(() => {
     localStorage.setItem('selectedSource', source);
   }, [source]);
 
@@ -193,6 +202,12 @@ export default function Watch() {
       <div className="player">
         <div className="player-controls">
           <i className="fa-regular fa-arrow-left" onClick={() => nav(`/${type}/${id}`)}></i>
+          {type === 'series' && episode < maxEpisodes && (
+            <i
+              className="fa-regular fa-forward-step right"
+              onClick={() => nav(`/watch/${id}?s=${season}&e=${episode + 1}&me=${maxEpisodes}`)}
+            ></i>
+          )}
           <select
             value={source}
             onChange={e => setSource(e.target.value)}
@@ -204,57 +219,15 @@ export default function Watch() {
             ))}
           </select>
         </div>
-
         <iframe
           ref={iframeRef}
-          src={getSourceUrl(source)}
+          src={getSource()}
           width="100%"
           height="100%"
           allowFullScreen
           title="Video Player"
         />
-
-        {/* Hidden iframes for preloading */}
-        {sources.map((s) => (
-          <iframe
-            key={s.name}
-            ref={(el) => (preloadRefs.current[s.name] = el)}
-            src={getSourceUrl(s.name)}style={{ display: 'none' }}
-            title={`Preload ${s.name}`}
-          />
-        ))}
       </div>
-
-      {type === 'series' && (
-        <div className="series-controls">
-          <button
-            onClick={() => {
-              if (episode > 1) {
-                setEpisode(episode - 1);
-              } else if (season > 1) {
-                setSeason(season - 1);
-                getMaxEpisodes(season - 1).then(() =>
-                  setEpisode(maxEpisodes)
-                );
-              }
-            }}
-          >
-            Previous Episode
-          </button>
-          <button
-            onClick={() => {
-              if (episode < maxEpisodes) {
-                setEpisode(episode + 1);
-              } else if (season < (data as Series).seasons) {
-                setSeason(season + 1);
-                setEpisode(1);
-              }
-            }}
-          >
-            Next Episode
-          </button>
-        </div>
-      )}
     </>
   );
 }
