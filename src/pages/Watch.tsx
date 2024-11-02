@@ -26,8 +26,6 @@ export default function Watch() {
     { name: 'Stream 6', url: 'https://www.2embed.stream/embed/' },
     { name: 'Source 7', url: 'https://player.autoembed.cc/embed' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
-    { name: 'Hindi', url: 'https://hindi.vidsrc.nl/embed' },
-    { name: 'English', url: 'https://english.vidsrc.nl/embed/' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
     { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
