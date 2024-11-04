@@ -259,7 +259,7 @@ export default function Title({ type, id }: TitleProps) {
 
   function getDownloadUrl_2() {
     let url = type === 'movie'
-      ? `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}/movie/${id}`
+      ? `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}?id=${id}`
       : `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}/tv/${id}/${season}/${episode}`;
     return url;
   }
