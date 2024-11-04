@@ -258,11 +258,10 @@ export default function Title({ type, id }: TitleProps) {
   }
 
   function getDownloadUrl_2() {
-    let url = type === 'movie'
-      ? `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}dlmovie.html?id=${id}`
-      : ${import.meta.env.VITE_MOIVE_DOWNLOAD_2}dlseries.html?id=${id}/${season}/${episode}`;
+   let url = type === 'movie'
+  ? `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}?id=${id}`
+  : `${import.meta.env.VITE_MOIVE_DOWNLOAD_1}?id=${id}/${season}/${episode}`;
 return url;
-  }
   
 
   // Function to full screen the video
