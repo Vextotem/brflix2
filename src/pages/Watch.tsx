@@ -18,11 +18,11 @@ export default function Watch() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sources = [
+   { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
   { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
      { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
      { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
         { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
-    { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
     { name: 'Vidlink', url: 'https://vidlink.pro/' },
     { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
     { name: '2embed 1', url: 'https://www.2embed.skin/embed' },
