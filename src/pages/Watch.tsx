@@ -39,9 +39,6 @@ export default function Watch() {
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://api.vidsrc.win/greentv.html',
     'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
-    'Source 10 India': 'https://api.vidsrc.win/apitv.html',
-    'Upcloud': 'https://api.vidsrc.win/upcloudtv.html',
-    'Megacloud': 'https://api.vidsrc.win/indextv.html',
     'Viaplay': 'https://api.vidsrc.win/vidtv.html',
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html'
   };
