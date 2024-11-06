@@ -18,23 +18,23 @@ export default function Watch() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sources = [
-    { name: 'Source 1', url: 'https://vid.braflix.win/embed' },
-    { name: 'Source 2', url: 'https://vidlink.pro/' },
-    { name: 'Source 3', url: 'https://vidsrc.io/embed' },
-    { name: 'Source 4', url: 'https://www.2embed.skin/embed' },
-    { name: 'Source 5', url: 'https://vidsrc.pro/embed/' },
-    { name: 'Stream 6', url: 'https://www.2embed.stream/embed/' },
-    { name: 'Source 7', url: 'https://player.autoembed.cc/embed' },
+  { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
+     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
+     { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
+        { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
+    { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
+    { name: 'Vidlink', url: 'https://vidlink.pro/' },
+    { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
+    { name: '2embed 1', url: 'https://www.2embed.skin/embed' },
+    { name: 'Pro', url: 'https://vidsrc.pro/embed/' },
+    { name: '2embed 2', url: 'https://www.2embed.stream/embed/' },
+    { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
-    { name: 'NEW VIP 4K ', url: 'https://vidsrc.dev/embed' },
+    { name: 'Multi', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
     { name: 'Source 9 India', url: 'https://api.vidsrc.win/embed.html' },
     { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
-     { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
-     { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
-     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
-        { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
   ];
 
@@ -76,7 +76,7 @@ export default function Watch() {
         url = `${baseSource}/filme/${id}`;
       } else if (source === 'PrimeWire') {
         url = `${baseSource}/movie?tmdb=${id}`;
-      } else if (source === 'NEW VIP 4K') {
+      } else if (source === 'Multi') {
         url = `${baseSource}?video_id=${id}&tmdb=1&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${baseSource}?id=${id}`;
@@ -88,7 +88,7 @@ export default function Watch() {
         url = `${baseSource}/serie/${id}/${season}/${episode}`;
       } else if (source === 'PrimeWire') {
         url = `${baseSource}/tv?tmdb=${id}&season=${season}&episode=${episode}`;
-      } else if (source === 'NEW VIP 4K') {
+      } else if (source === 'Multi') {
         url = `${baseSource}?video_id=${id}&tmdb=1&s=${season}&e=${episode}&check=1`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
