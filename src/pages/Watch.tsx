@@ -22,9 +22,22 @@ export default function Watch() {
     { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
-    // ... other sources
+ { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
+    { name: 'Vidlink', url: 'https://vidlink.pro/' },
+    { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
+    { name: '2embed', url: 'https://www.2embed.skin/embed' },
+    { name: 'Pro', url: 'https://vidsrc.pro/embed/' },
+    { name: 'Stream 6', url: 'https://www.2embed.stream/embed/' },
+    { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
+    { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
+    { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
+    { name: 'Multi', url: 'https://vidsrc.dev/embed' },
+    { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
+    { name: 'Source 9 India', url: 'https://api.vidsrc.win/embed.html' },
+    { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
+    { name: 'Brazil', url: 'https://embed.warezcdn.com' },
   ];
-
+  
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'Source 8 India': 'https://api.vidsrc.win/greentv.html',
     'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
