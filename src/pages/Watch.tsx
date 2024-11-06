@@ -18,16 +18,16 @@ export default function Watch() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sources = [
-   { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
-  { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
-     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
+   { name: 'Upcloud', url: 'https://api.vidsrc.win/upcloud.html' },
      { name: 'Megacloud', url: 'https://api.vidsrc.win/index.html' },
+     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
         { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
+    { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
     { name: 'Vidlink', url: 'https://vidlink.pro/' },
     { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
-    { name: '2embed 1', url: 'https://www.2embed.skin/embed' },
+    { name: '2embed', url: 'https://www.2embed.skin/embed' },
     { name: 'Pro', url: 'https://vidsrc.pro/embed/' },
-    { name: '2embed 2', url: 'https://www.2embed.stream/embed/' },
+    { name: 'Stream 6', url: 'https://www.2embed.stream/embed/' },
     { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
