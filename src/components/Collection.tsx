@@ -60,8 +60,8 @@ export default function Collection({ title, items }: CollectionT) {
       <div className="collection-slider">
         {/* Left Arrow */}
         {index > 0 && (
-          <div className="arrow left-arrow" onClick={onBack}>
-            &#9664;
+          <div className="collection-arrow" onClick={onBack}>
+            <i className="fa-solid fa-chevron-left"></i>
           </div>
         )}
 
@@ -81,8 +81,8 @@ export default function Collection({ title, items }: CollectionT) {
 
         {/* Right Arrow */}
         {index < indexMax && (
-          <div className="arrow right-arrow" onClick={onNext}>
-            &#9654;
+          <div className="collection-arrow right" onClick={onNext}>
+            <i className="fa-solid fa-chevron-right"></i>
           </div>
         )}
       </div>
