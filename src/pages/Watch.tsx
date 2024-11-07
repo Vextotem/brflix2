@@ -18,8 +18,8 @@ export default function Watch() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sources = [
+  { name: 'Vidlink', url: 'https://vidlink.pro/' },
   { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
-    { name: 'Vidlink', url: 'https://vidlink.pro/' },
     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
