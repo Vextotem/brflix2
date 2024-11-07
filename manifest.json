@@ -1,6 +1,6 @@
 {
-    "name": "Infinite Download store",
-    "short_name": "Infinite Download",
+    "name": "Braflix Movies",
+    "short_name": "Braflix",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
