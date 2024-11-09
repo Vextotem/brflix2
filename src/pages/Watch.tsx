@@ -206,14 +206,14 @@ export default function Watch() {
           </select>
         </div>
         <iframe
-          ref={iframeRef}
-          src={getSource()}
-          referrerpolicy="origin"
-          width="100%"
-          height="100%"
-          allowFullScreen
-          title="Video Player"
-        />
+  ref={iframeRef}
+  src={getSource()}
+  width="100%"
+  height="100%"
+  allowFullScreen
+  title="Video Player"
+  referrerPolicy="origin"
+/>
       </div>
     </>
   );
