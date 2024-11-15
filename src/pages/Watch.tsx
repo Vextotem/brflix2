@@ -28,6 +28,7 @@ export default function Watch() {
     { name: '2embed', url: 'https://www.2embed.stream/embed/' },
     { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
+     { name: 'Bomb', url: 'https://bombthe.irish/embed' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
     { name: 'Multi', url: 'https://vidsrc.dev/embed' },
     { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
