@@ -18,12 +18,12 @@ export default function Watch() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sources = [
-  { name: 'Ghost', url: 'https://api.vidsrc.win/su.html' },  // New source
     { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
     { name: 'Vidlink', url: 'https://vidlink.pro/' },
     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
+     { name: 'Ghost', url: 'https://api.vidsrc.win/su.html' },
     { name: 'Pro', url: 'https://vidsrc.pro/embed/' },
     { name: '2embed', url: 'https://www.2embed.stream/embed/' },
     { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
@@ -42,8 +42,8 @@ export default function Watch() {
     'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
     'Viaplay': 'https://api.vidsrc.win/vidtv.html',
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html',
-    'Ghost': 'https://api.vidsrc.win/sutv.html',   // New series source URL
-    'Super': 'https://api.vidsrc.win/supertv.html' // New series source URL
+    'Ghost': 'https://api.vidsrc.win/sutv.html',  
+    'Super': 'https://api.vidsrc.win/supertv.html' 
   };
 
   const [source, setSource] = useState<string>(
