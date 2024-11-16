@@ -23,6 +23,7 @@ export default function Watch() {
     { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
+    { name: 'Simple', url: 'https://english.vidsrc.nl/embed' },
      { name: 'Ghost', url: 'https://api.vidsrc.win/su.html' },
     { name: 'Pro', url: 'https://vidsrc.pro/embed/' },
     { name: '2embed', url: 'https://www.2embed.stream/embed/' },
