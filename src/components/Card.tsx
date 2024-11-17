@@ -48,9 +48,11 @@ export default function Card({ id, poster, title, type, Ref }: CardProps) {
   }
 
   function onCardClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (active) return;
+
     e.preventDefault();
 
-    nav(`/${type}/${id}`);
+    setActive(true);
   }
 
   function onWindowClick(e: MouseEvent) {
