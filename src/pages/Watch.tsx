@@ -30,17 +30,17 @@ export default function Watch() {
     { name: 'LimeWire', url: 'https://bombthe.irish/embed/' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
-    { name: 'Source 8 India', url: 'https://api.vidsrc.win/green.html' },
-    { name: 'Source 9 India', url: 'https://api.vidsrc.win/embed.html' },
-    { name: 'Source 10 India', url: 'https://api.vidsrc.win/api.html' },
+    { name: 'India I', url: 'https://api.vidsrc.win/green.html' },
+    { name: 'India II', url: 'https://api.vidsrc.win/embed.html' },
+    { name: 'India III', url: 'https://api.vidsrc.win/api.html' },
     { name: 'Brazil', url: 'https://embed.warezcdn.com' },
     { name: 'Super', url: 'https://api.vidsrc.win/super.html' },
     { name: 'Flixy', url: 'https://flicky.host/embed' }
   ];
 
   const specialSeriesSourcesMap: { [key: string]: string } = {
-    'Source 8 India': 'https://api.vidsrc.win/greentv.html',
-    'Source 9 India': 'https://api.vidsrc.win/embedtv.html',
+    'India I': 'https://api.vidsrc.win/greentv.html',
+    'India II': 'https://api.vidsrc.win/embedtv.html',
     'Viaplay': 'https://api.vidsrc.win/vidtv.html',    
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html',
     'Super': 'https://api.vidsrc.win/vidtv.html'
@@ -87,7 +87,7 @@ export default function Watch() {
         url = `${baseSource}/movie/?id=${id}`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${baseSource}?id=${id}`;
-      } else if (source === 'Source 10 India') {
+      } else if (source === 'India III') {
         url = `${baseSource}?id=${id}`;
       } else {
         url = `${baseSource}/movie/${id}`;
@@ -103,7 +103,7 @@ export default function Watch() {
         url = `${baseSource}/tv/?id=${id}/${season}/${episode}`;
       } else if (specialSeriesSourcesMap[source]) {
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
-      } else if (source === 'Source 10 India') {
+      } else if (source === 'India III') {
         url = `${baseSource}?id=${id}&s=${season}&e=${episode}`;
       } else {
         url = `${baseSource}/tv/${id}/${season}/${episode}`;
