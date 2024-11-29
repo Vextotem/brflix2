@@ -4,14 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Wishlist from '@/utils/Wishlist';
-import MutePreference from '@/utils/MutePreference';
 
 import EpisodeT from '@/types/Episode';
 import MediaType from '@/types/MediaType';
 import Movie from '@/types/Movie';
 import Series from '@/types/Series';
 import Continue from '@/types/Continue';
-import Loading from './Loading';
 
 import Card from './Card';
 import Episode from './Episode';
@@ -34,14 +32,6 @@ export default function Title({ type, id }: TitleProps) {
   const [wished, setWished] = useState(false);
   const [extendSuggestions, setExtendSuggestions] = useState(false);
   const [extendEpisodes, setExtendEpisodes] = useState(false);
-  const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isMuted, setIsMuted] = useState(MutePreference.isMuted()); // Get the initial state from MutePreference
-  const videoRef = useRef<HTMLIFrameElement>(null);
-
-  // Loading state updated code here
-  const [loading, setLoading] = useState(true);
 
   function getYear(date: string) {
     const timestamp = Date.parse(date);
@@ -71,9 +61,6 @@ export default function Title({ type, id }: TitleProps) {
     const data = res.data;
 
     setData(data);
-
-    // Loading state updated code here
-    setLoading(false); // Set loading to false when data is fetched
 
     if (type !== 'series') return;
 
@@ -115,26 +102,6 @@ export default function Title({ type, id }: TitleProps) {
     setSeason(s);
     getEpisodes(s);
   }
-  
-
-  async function fetchTrailer() {
-    const endpoint = `${import.meta.env.VITE_AWS_API}/${type}/${id}`;
-    const req = await fetch(endpoint);
-    const res = await req.json();
-
-    const trailers = res.results.filter(
-      (trailer: any) => trailer.type.toLowerCase() === 'trailer' || trailer.name.toLowerCase().includes('Trailer', 'official')
-    );
-
-    if (trailers.length > 0) {
-      const trailerKey = trailers[0].key;
-      const youtubeUrl = `https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&loop=1&mute=${MutePreference.isMuted()}&playlist=${trailerKey}&enablejsapi=1`;
-
-      setTrailerUrl(youtubeUrl);
-
-    }  
-  }
-  
 
   function onPlusClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -184,12 +151,9 @@ export default function Title({ type, id }: TitleProps) {
 
     setData(undefined);
     setEpisodes(undefined);
-    fetchTrailer();
+
     setExtendEpisodes(false);
     setExtendSuggestions(false);
-
-    // Loading state updated code here
-    setLoading(true); // Set loading to true when fetching data
 
     getData();
 
@@ -216,95 +180,9 @@ export default function Title({ type, id }: TitleProps) {
     };
   }, [data]);
 
-  useEffect(() => {
-    const iframe = videoRef.current;
-    if (iframe) {
-      const player = iframe.contentWindow;
-      if (player && typeof player.postMessage === 'function') {
-        const command = isMuted ? 'mute' : 'unMute';
-        player.postMessage(
-          JSON.stringify({
-            event: 'command',
-            func: command,
-          }),
-          '*'
-        );
-      }
-    }
-  }, [isMuted]);
-
-
-  // Listen for changes to the mute preference
-  useEffect(() => {
-
-    const handleMuteChange = () => {
-      setIsMuted(MutePreference.isMuted());
-    };
-
-    MutePreference.onMuteChange(handleMuteChange);
-
-    return () => {
-      MutePreference.offMuteChange(handleMuteChange);
-    };
-  }, []);
-
-  // Loading state updated code here
-  if (loading) {
-    return <Loading />;
-  }
-
   if (!data) {
     return <div className="title" ref={ref}></div>;
   }
-
-  function getDownloadUrl_2() {
-    let url = type === 'movie'
-      ? `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}/movie/${id}`
-      : `${import.meta.env.VITE_MOIVE_DOWNLOAD_2}/tv/${id}/${season}/${episode}`;
-    return url;
-  }
-
-  // Function to full screen the video
-  const toggleFullScreen = () => {
-    if (!isFullScreen) {
-      // Enter fullscreen mode logic
-      const iframe = videoRef.current;
-      if (iframe && iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      }
-    } else {
-      // Exit fullscreen mode logic
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    }
-    setIsFullScreen(!isFullScreen);
-  };
-
-  // Function to toggle mute state
-  const toggleMute = () => {
-    const newMuteState = !isMuted;
-    setIsMuted(newMuteState); // Update local state
-
-    // Update YouTube video mute state
-    const iframe = videoRef.current;
-    if (iframe) {
-      const player = iframe.contentWindow;
-      if (player && typeof player.postMessage === 'function') {
-        const command = newMuteState ? 'mute' : 'unMute';
-        player.postMessage(
-          JSON.stringify({
-            event: 'command',
-            func: command,
-          }),
-          '*'
-        );
-      }
-    }
-
-    MutePreference.setMute(newMuteState); // Save the new mute state to storage
-  };
-
 
   return (
     <>
@@ -319,46 +197,17 @@ export default function Title({ type, id }: TitleProps) {
           <div className="title-close" onClick={() => nav('/')}>
             <i className="fa-light fa-close"></i>
           </div>
-          <div className="title-backdrop" style={{ position: 'relative' }}>
-            {trailerUrl ? ( // Conditionally render trailer if URL is available
-              <iframe
-                src={trailerUrl}
-                ref={videoRef} // Add ref to access the iframe element
-                frameBorder="0"
-                allow="autoplay; encrypted-media; fullscreen" // Add fullscreen permission
-                allowFullScreen // This is required for YouTube videos to support fullscreen
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  backgroundImage: `url(${data.images.backdrop})`,
-                  backgroundSize: 'cover'
-                }}
-              ></iframe>
-            ) : (
-              <div
-                className="title-backdrop"
-                style={{ backgroundImage: `url(${data.images.backdrop})` }}
-              ></div>
-            )}
-          </div>
 
+          <div
+            className="title-backdrop"
+            style={{
+              backgroundImage: `url(${data.images.backdrop})`
+            }}
+          ></div>
 
           <div className="title-content">
             <div className="title-logo">
               <img alt={data.title} src={data.images.logo} />
-            </div>
-
-            <div className="left-side-buttons">
-              <button className="button" onClick={toggleMute}>
-                <i className={`fa-solid ${isMuted ? 'fa-volume-mute' : 'fa-volume-up'}`}></i>
-              </button>
-
-              <button className="button btn" onClick={toggleFullScreen}>
-                <i className="fa-solid fa-expand"></i>
-              </button>
             </div>
 
             <div className="title-actions">
@@ -376,12 +225,6 @@ export default function Title({ type, id }: TitleProps) {
                   <i className="fa-solid fa-plus"></i>
                 </button>
               )}
-              <div className="button2">
-                <a href={getDownloadUrl_2()} target="_blank" rel="noopener noreferrer">
-                  <i className="fa-solid fa-download"></i>
-                  <span>{type === 'series' ? `S${season} E${episode}` : 'Download'}</span>
-                </a>
-              </div>
             </div>
 
             <div className="title-grid">
