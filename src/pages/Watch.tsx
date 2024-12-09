@@ -21,7 +21,7 @@ export default function Watch() {
     { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
     { name: 'Vidlink', url: 'https://vidlink.pro/' },
     { name: 'Multi', url: 'https://vidsrc.dev/embed' },
-    { name: 'Viaplay', url: 'https://api.vidsrc.win/vid.html' },
+    { name: 'Viaplay', url: 'https://www.rgshows.me/player/movies/api2/index.html' },
     { name: 'Vidplay', url: 'https://vidsrc.cc/v2/embed' },
     { name: 'Pro', url: 'https://vidsrc.pro/embed/' },
     { name: 'Vidsrc', url: 'https://vidsrc.io/embed' },
@@ -41,7 +41,7 @@ export default function Watch() {
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'India I': 'https://api.vidsrc.win/greentv.html',
     'India II': 'https://api.vidsrc.win/embedtv.html',
-    'Viaplay': 'https://api.vidsrc.win/vidtv.html',    
+    'Viaplay': 'https://rgshows.me/player/series/api2/index.html',    
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html',
     'Super': 'https://api.vidsrc.win/vidtv.html'
   };
