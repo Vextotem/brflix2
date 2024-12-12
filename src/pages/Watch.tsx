@@ -18,7 +18,7 @@ export default function Watch() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sources = [
-    { name: 'Braflix', url: 'https://vid.braflix.win/embed' },
+    { name: 'Braflix', url: 'https://vidsrc.io/embed' },
     { name: 'Vidlink', url: 'https://vidlink.pro/' },
     { name: 'Multi', url: 'https://vidsrc.dev/embed' },
     { name: 'Viaplay', url: 'https://www.rgshows.me/player/movies/api2/index.html' },
