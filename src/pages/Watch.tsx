@@ -28,6 +28,7 @@ export default function Watch() {
     { name: '2embed', url: 'https://www.2embed.stream/embed/' },
     { name: 'PrimeWire', url: 'https://www.primewire.tf/embed' },
     { name: 'LimeWire', url: 'https://bombthe.irish/embed/' },
+    { name: 'Club', url: 'https://moviesapi.club/' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
     { name: 'India I', url: 'https://api.vidsrc.win/green.html' },
@@ -41,7 +42,7 @@ export default function Watch() {
   const specialSeriesSourcesMap: { [key: string]: string } = {
     'India I': 'https://api.vidsrc.win/greentv.html',
     'India II': 'https://api.vidsrc.win/embedtv.html',
-    'Viaplay': 'https://rgshows.me/player/series/api2/index.html',    
+    'Viaplay': 'https://rgshows.me/player/series/api2/index.html',
     'Hindi HD': 'https://api.vidsrc.win/hinditv.html',
     'Super': 'https://api.vidsrc.win/vidtv.html'
   };
@@ -101,6 +102,8 @@ export default function Watch() {
         url = `https://vidsrc.dev/embed/tv/${id}/${season}/${episode}`;
       } else if (source === 'Flixy') {
         url = `${baseSource}/tv/?id=${id}/${season}/${episode}`;
+      } else if (source === 'Club') {
+        url = `${baseSource}/tv/${id}-${season}-${episode}`; // Fixed Club series format
       } else if (specialSeriesSourcesMap[source]) {
         url = `${specialSeriesSourcesMap[source]}?id=${id}&s=${season}&e=${episode}`;
       } else if (source === 'India III') {
