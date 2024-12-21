@@ -82,26 +82,26 @@ export default function Nav() {
         <a href="https://t.me/hdoboxapk2" target="_blank" rel="noopener noreferrer">Join Telegram</a>
 
         <NavLink className="mobile" to="/movies">
-          <i className="fa-regular fa-film"></i>
+          <i className="fa-solid fa-film"></i>
         </NavLink>
 
         <NavLink className="mobile" to="/series">
-          <i className="fa-regular fa-tv"></i>
+          <i className="fa-solid fa-tv"></i>
         </NavLink>
 
         <NavLink className="mobile" to="/list">
-          <i className="fa-regular fa-list"></i>
+          <i className="fa-solid fa-list"></i>
         </NavLink>
 
         <a href="https://t.me/HdoBoxApk2" className='mobile' target="_blank" rel="noopener noreferrer">
-          <i className="fa-regular fa-comments"></i>
+          <i className="fa-brands fa-telegram"></i>
         </a>
       </div>
 
       <div className="top-bar-search" ref={wrapperRef}>
         {searching ? (
           <div className="top-bar-input">
-            <i className="fa-regular fa-search"></i>
+            <i className="fa-solid fa-search"></i>
             <input
               type="text"
               ref={inputRef}
@@ -111,7 +111,7 @@ export default function Nav() {
             />
           </div>
         ) : (
-          <i className="fa-regular fa-search action" onClick={onSearchClick}></i>
+          <i className="fa-solid fa-search action" onClick={onSearchClick}></i>
         )}
       </div>
     </div>
