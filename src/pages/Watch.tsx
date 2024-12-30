@@ -32,6 +32,7 @@ export default function Watch() {
     { name: 'LimeWire', url: 'https://bombthe.irish/embed/' },
     { name: 'Club', url: 'https://moviesapi.club/' },
       { name: '111Movies', url: 'https://111movies.com/' },
+        { name: 'Hexa', url: 'https://api.hexa.watch' },
     { name: 'Hindi HD', url: 'https://api.vidsrc.win/hindi.html' },
     { name: 'Autoembed', url: 'https://player.autoembed.cc/embed' },
     { name: 'India I', url: 'https://api.vidsrc.win/saysu.html' },
